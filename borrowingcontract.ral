@@ -1,0 +1,61 @@
+import "std/fungible_token_interface"
+
+Contract SimpleInterestToken(
+    name: ByteVec,
+    symbol: ByteVec,
+    decimals: U256,
+    supply: U256,
+    mut totalBalance: U256
+) implements IFungibleToken {
+
+    // Events
+    event Withdraw(amount: U256)
+    event Deposit(amount: U256)
+    event InterestUpdated(interestAmount: U256)
+
+    // Error Codes
+    enum ErrorCodes {
+        InvalidAmount = 1
+    }
+
+    // Token interface implementations
+    pub fn getSymbol() -> ByteVec {
+        return symbol
+    }
+
+    pub fn getName() -> ByteVec {
+        return name
+    }
+
+    pub fn getDecimals() -> U256 {
+        return decimals
+    }
+
+    pub fn getTotalSupply() -> U256 {
+        return supply
+    }
+
+    fn updateInterest() -> () {
+        
+    }
+
+    // Deposit function
+    @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn deposit(amount: U256) -> () {
+        assert!(amount > 0, ErrorCodes.InvalidAmount);
+        
+        totalBalance += amount;
+
+        emit Deposit(amount);
+    }
+
+    // Withdraw function
+    @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn withdraw(amount: U256) -> () {
+        assert!(amount <= totalBalance && amount > 0, ErrorCodes.InvalidAmount);
+
+        totalBalance -= amount;
+
+        emit Withdraw(amount);
+    }
+}

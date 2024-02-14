@@ -11,8 +11,13 @@ import {
   SignerProvider,
   HexString,
 } from "@alephium/web3";
+import { default as DepositScriptJson } from "../Deposit.ral.json";
 import { default as WithdrawScriptJson } from "../Withdraw.ral.json";
 
+export const Deposit = new ExecutableScript<{
+  token: HexString;
+  amount: bigint;
+}>(Script.fromJson(DepositScriptJson));
 export const Withdraw = new ExecutableScript<{
   token: HexString;
   amount: bigint;

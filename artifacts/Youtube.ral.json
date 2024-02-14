@@ -1,12 +1,12 @@
 {
-  "version": "v2.5.3",
-  "name": "TokenFaucet",
-  "bytecode": "060709121b4024402d404a406b010000000102ce0002010000000102ce0102010000000102ce0202010000000102ce0302010000000102a0000201020101001116000e320c7bb4b11600aba00016002ba10005b416005f01020102001316000e320d7bb417011601b11600aba00016002aa10006b416005f",
-  "codeHash": "6e7d08da9ade126c6d24455187d2410dad9500bc4da158cc53c54ede4483b71f",
+  "version": "v2.3.5",
+  "name": "Youtube",
+  "bytecode": "060709121b4024404c40744096010000000102ce0102010000000102ce0002010000000102ce0202010000000102ce030201020102001816000d2f0e7bb41701a0000d2ba1001601b21600a7b21601b11600aa05160116005f01020102001816000d2f0e7bb41701a0000d2aa100b216011600a71601b2b11600aa06160116005f01020102001416000d2f0e7bb417011601b21600a7b21601b11600aa07160116005f",
+  "codeHash": "38d751f3d5ef35debdc44152f60ff4d733bb00f756e1285ce0cb3c8de349a7e1",
   "fieldsSig": {
     "names": [
-      "symbol",
       "name",
+      "symbol",
       "decimals",
       "supply",
       "balance",
@@ -33,7 +33,7 @@
     {
       "name": "Withdraw",
       "fieldNames": [
-        "to",
+        "user",
         "amount"
       ],
       "fieldTypes": [
@@ -44,7 +44,18 @@
     {
       "name": "Deposit",
       "fieldNames": [
-        "from",
+        "user",
+        "amount"
+      ],
+      "fieldTypes": [
+        "Address",
+        "U256"
+      ]
+    },
+    {
+      "name": "Devwithdraw",
+      "fieldNames": [
+        "user",
         "amount"
       ],
       "fieldTypes": [
@@ -103,18 +114,6 @@
       ]
     },
     {
-      "name": "balance",
-      "usePreapprovedAssets": false,
-      "useAssetsInContract": false,
-      "isPublic": true,
-      "paramNames": [],
-      "paramTypes": [],
-      "paramIsMutable": [],
-      "returnTypes": [
-        "U256"
-      ]
-    },
-    {
       "name": "withdraw",
       "usePreapprovedAssets": false,
       "useAssetsInContract": true,
@@ -145,6 +144,22 @@
         false
       ],
       "returnTypes": []
+    },
+    {
+      "name": "devwithdraw",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": true,
+      "isPublic": true,
+      "paramNames": [
+        "amount"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
     }
   ],
   "constants": [],
@@ -153,17 +168,10 @@
       "name": "ErrorCodes",
       "fields": [
         {
-          "name": "InvalidWithdrawAmount",
+          "name": "Invalidamount",
           "value": {
             "type": "U256",
-            "value": "0"
-          }
-        },
-        {
-          "name": "InvalidDepositamount",
-          "value": {
-            "type": "U256",
-            "value": "1"
+            "value": "2"
           }
         }
       ]

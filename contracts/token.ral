@@ -16,9 +16,11 @@ Contract TokenFaucet(
     // Events allow for logging of activities on the blockchain.
     // Alephium clients can listen to events in order to react to contract state changes.
     event Withdraw(to: Address, amount: U256)
+    event Deposit(from: Address, amount: U256)
 
     enum ErrorCodes {
         InvalidWithdrawAmount = 0
+        InvalidDepositamount = 1
     }
 
     // A public function that returns the initial supply of the contract's token.
@@ -65,5 +67,22 @@ Contract TokenFaucet(
 
         // Emit the event defined earlier.
         emit Withdraw(callerAddress!(), amount)
+    }
+
+    @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn deposit(amount: U256) -> () {
+        emit Debug(`The current balance is ${balance}`)
+
+        assert!(amount <= 2, ErrorCodes.InvalidDepositamount)
+        let caller = callerAddress!() 
+        
+        // transferToken!(selfAddress!(), caller, ALPH, amount) // sending token payment to contract
+        // transferToken!(caller, selfAddress!(), selfTokenId!(), amount) // we get token for depositing
+
+        // transferTokenToSelf!(caller, ALPH, amount)
+        transferTokenFromSelf!(caller, selfTokenId!(), amount)
+
+        balance = balance + amount
+        emit Deposit(callerAddress!(), amount)
     }
 }

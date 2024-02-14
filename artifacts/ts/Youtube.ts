@@ -24,14 +24,14 @@ import {
   ContractInstance,
   getContractEventsCurrentCount,
 } from "@alephium/web3";
-import { default as TokenFaucetContractJson } from "../TokenFaucet.ral.json";
+import { default as YoutubeContractJson } from "../Youtube.ral.json";
 import { getContractByCodeHash } from "./contracts";
 
 // Custom types for the contract
-export namespace TokenFaucetTypes {
+export namespace YoutubeTypes {
   export type Fields = {
-    symbol: HexString;
     name: HexString;
+    symbol: HexString;
     decimals: bigint;
     supply: bigint;
     balance: bigint;
@@ -39,8 +39,12 @@ export namespace TokenFaucetTypes {
 
   export type State = ContractState<Fields>;
 
-  export type WithdrawEvent = ContractEvent<{ to: Address; amount: bigint }>;
-  export type DepositEvent = ContractEvent<{ from: Address; amount: bigint }>;
+  export type WithdrawEvent = ContractEvent<{ user: Address; amount: bigint }>;
+  export type DepositEvent = ContractEvent<{ user: Address; amount: bigint }>;
+  export type DevwithdrawEvent = ContractEvent<{
+    user: Address;
+    amount: bigint;
+  }>;
 
   export interface CallMethodTable {
     getSymbol: {
@@ -59,10 +63,6 @@ export namespace TokenFaucetTypes {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
-    balance: {
-      params: Omit<CallContractParams<{}>, "args">;
-      result: CallContractResult<bigint>;
-    };
   }
   export type CallMethodParams<T extends keyof CallMethodTable> =
     CallMethodTable[T]["params"];
@@ -78,97 +78,74 @@ export namespace TokenFaucetTypes {
   };
 }
 
-class Factory extends ContractFactory<
-  TokenFaucetInstance,
-  TokenFaucetTypes.Fields
-> {
+class Factory extends ContractFactory<YoutubeInstance, YoutubeTypes.Fields> {
   getInitialFieldsWithDefaultValues() {
-    return this.contract.getInitialFieldsWithDefaultValues() as TokenFaucetTypes.Fields;
+    return this.contract.getInitialFieldsWithDefaultValues() as YoutubeTypes.Fields;
   }
 
-  eventIndex = { Withdraw: 0, Deposit: 1 };
-  consts = {
-    ErrorCodes: {
-      InvalidWithdrawAmount: BigInt(0),
-      InvalidDepositamount: BigInt(1),
-    },
-  };
+  eventIndex = { Withdraw: 0, Deposit: 1, Devwithdraw: 2 };
+  consts = { ErrorCodes: { Invalidamount: BigInt(2) } };
 
-  at(address: string): TokenFaucetInstance {
-    return new TokenFaucetInstance(address);
+  at(address: string): YoutubeInstance {
+    return new YoutubeInstance(address);
   }
 
   tests = {
     getSymbol: async (
-      params: Omit<
-        TestContractParams<TokenFaucetTypes.Fields, never>,
-        "testArgs"
-      >
+      params: Omit<TestContractParams<YoutubeTypes.Fields, never>, "testArgs">
     ): Promise<TestContractResult<HexString>> => {
       return testMethod(this, "getSymbol", params);
     },
     getName: async (
-      params: Omit<
-        TestContractParams<TokenFaucetTypes.Fields, never>,
-        "testArgs"
-      >
+      params: Omit<TestContractParams<YoutubeTypes.Fields, never>, "testArgs">
     ): Promise<TestContractResult<HexString>> => {
       return testMethod(this, "getName", params);
     },
     getDecimals: async (
-      params: Omit<
-        TestContractParams<TokenFaucetTypes.Fields, never>,
-        "testArgs"
-      >
+      params: Omit<TestContractParams<YoutubeTypes.Fields, never>, "testArgs">
     ): Promise<TestContractResult<bigint>> => {
       return testMethod(this, "getDecimals", params);
     },
     getTotalSupply: async (
-      params: Omit<
-        TestContractParams<TokenFaucetTypes.Fields, never>,
-        "testArgs"
-      >
+      params: Omit<TestContractParams<YoutubeTypes.Fields, never>, "testArgs">
     ): Promise<TestContractResult<bigint>> => {
       return testMethod(this, "getTotalSupply", params);
     },
-    balance: async (
-      params: Omit<
-        TestContractParams<TokenFaucetTypes.Fields, never>,
-        "testArgs"
-      >
-    ): Promise<TestContractResult<bigint>> => {
-      return testMethod(this, "balance", params);
-    },
     withdraw: async (
-      params: TestContractParams<TokenFaucetTypes.Fields, { amount: bigint }>
+      params: TestContractParams<YoutubeTypes.Fields, { amount: bigint }>
     ): Promise<TestContractResult<null>> => {
       return testMethod(this, "withdraw", params);
     },
     deposit: async (
-      params: TestContractParams<TokenFaucetTypes.Fields, { amount: bigint }>
+      params: TestContractParams<YoutubeTypes.Fields, { amount: bigint }>
     ): Promise<TestContractResult<null>> => {
       return testMethod(this, "deposit", params);
+    },
+    devwithdraw: async (
+      params: TestContractParams<YoutubeTypes.Fields, { amount: bigint }>
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "devwithdraw", params);
     },
   };
 }
 
 // Use this object to test and deploy the contract
-export const TokenFaucet = new Factory(
+export const Youtube = new Factory(
   Contract.fromJson(
-    TokenFaucetContractJson,
-    "=20-2+67=2-2+a5=101+3a0007e02=1+75468652063757272656e742062616c616e63652069732000=57+5a0007e0217546865206=1+757272656e742062616c616e63652069732000=54",
-    "798fbece156fa6c63fb0a55b18a94a58527cb5bb278f5cf4bb6f0246905047ae"
+    YoutubeContractJson,
+    "",
+    "38d751f3d5ef35debdc44152f60ff4d733bb00f756e1285ce0cb3c8de349a7e1"
   )
 );
 
 // Use this class to interact with the blockchain
-export class TokenFaucetInstance extends ContractInstance {
+export class YoutubeInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<TokenFaucetTypes.State> {
-    return fetchContractState(TokenFaucet, this);
+  async fetchState(): Promise<YoutubeTypes.State> {
+    return fetchContractState(Youtube, this);
   }
 
   async getContractEventsCurrentCount(): Promise<number> {
@@ -176,11 +153,11 @@ export class TokenFaucetInstance extends ContractInstance {
   }
 
   subscribeWithdrawEvent(
-    options: EventSubscribeOptions<TokenFaucetTypes.WithdrawEvent>,
+    options: EventSubscribeOptions<YoutubeTypes.WithdrawEvent>,
     fromCount?: number
   ): EventSubscription {
     return subscribeContractEvent(
-      TokenFaucet.contract,
+      Youtube.contract,
       this,
       options,
       "Withdraw",
@@ -189,11 +166,11 @@ export class TokenFaucetInstance extends ContractInstance {
   }
 
   subscribeDepositEvent(
-    options: EventSubscribeOptions<TokenFaucetTypes.DepositEvent>,
+    options: EventSubscribeOptions<YoutubeTypes.DepositEvent>,
     fromCount?: number
   ): EventSubscription {
     return subscribeContractEvent(
-      TokenFaucet.contract,
+      Youtube.contract,
       this,
       options,
       "Deposit",
@@ -201,26 +178,36 @@ export class TokenFaucetInstance extends ContractInstance {
     );
   }
 
-  subscribeAllEvents(
-    options: EventSubscribeOptions<
-      TokenFaucetTypes.WithdrawEvent | TokenFaucetTypes.DepositEvent
-    >,
+  subscribeDevwithdrawEvent(
+    options: EventSubscribeOptions<YoutubeTypes.DevwithdrawEvent>,
     fromCount?: number
   ): EventSubscription {
-    return subscribeContractEvents(
-      TokenFaucet.contract,
+    return subscribeContractEvent(
+      Youtube.contract,
       this,
       options,
+      "Devwithdraw",
       fromCount
     );
   }
 
+  subscribeAllEvents(
+    options: EventSubscribeOptions<
+      | YoutubeTypes.WithdrawEvent
+      | YoutubeTypes.DepositEvent
+      | YoutubeTypes.DevwithdrawEvent
+    >,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvents(Youtube.contract, this, options, fromCount);
+  }
+
   methods = {
     getSymbol: async (
-      params?: TokenFaucetTypes.CallMethodParams<"getSymbol">
-    ): Promise<TokenFaucetTypes.CallMethodResult<"getSymbol">> => {
+      params?: YoutubeTypes.CallMethodParams<"getSymbol">
+    ): Promise<YoutubeTypes.CallMethodResult<"getSymbol">> => {
       return callMethod(
-        TokenFaucet,
+        Youtube,
         this,
         "getSymbol",
         params === undefined ? {} : params,
@@ -228,10 +215,10 @@ export class TokenFaucetInstance extends ContractInstance {
       );
     },
     getName: async (
-      params?: TokenFaucetTypes.CallMethodParams<"getName">
-    ): Promise<TokenFaucetTypes.CallMethodResult<"getName">> => {
+      params?: YoutubeTypes.CallMethodParams<"getName">
+    ): Promise<YoutubeTypes.CallMethodResult<"getName">> => {
       return callMethod(
-        TokenFaucet,
+        Youtube,
         this,
         "getName",
         params === undefined ? {} : params,
@@ -239,10 +226,10 @@ export class TokenFaucetInstance extends ContractInstance {
       );
     },
     getDecimals: async (
-      params?: TokenFaucetTypes.CallMethodParams<"getDecimals">
-    ): Promise<TokenFaucetTypes.CallMethodResult<"getDecimals">> => {
+      params?: YoutubeTypes.CallMethodParams<"getDecimals">
+    ): Promise<YoutubeTypes.CallMethodResult<"getDecimals">> => {
       return callMethod(
-        TokenFaucet,
+        Youtube,
         this,
         "getDecimals",
         params === undefined ? {} : params,
@@ -250,37 +237,26 @@ export class TokenFaucetInstance extends ContractInstance {
       );
     },
     getTotalSupply: async (
-      params?: TokenFaucetTypes.CallMethodParams<"getTotalSupply">
-    ): Promise<TokenFaucetTypes.CallMethodResult<"getTotalSupply">> => {
+      params?: YoutubeTypes.CallMethodParams<"getTotalSupply">
+    ): Promise<YoutubeTypes.CallMethodResult<"getTotalSupply">> => {
       return callMethod(
-        TokenFaucet,
+        Youtube,
         this,
         "getTotalSupply",
         params === undefined ? {} : params,
         getContractByCodeHash
       );
     },
-    balance: async (
-      params?: TokenFaucetTypes.CallMethodParams<"balance">
-    ): Promise<TokenFaucetTypes.CallMethodResult<"balance">> => {
-      return callMethod(
-        TokenFaucet,
-        this,
-        "balance",
-        params === undefined ? {} : params,
-        getContractByCodeHash
-      );
-    },
   };
 
-  async multicall<Calls extends TokenFaucetTypes.MultiCallParams>(
+  async multicall<Calls extends YoutubeTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<TokenFaucetTypes.MultiCallResults<Calls>> {
+  ): Promise<YoutubeTypes.MultiCallResults<Calls>> {
     return (await multicallMethods(
-      TokenFaucet,
+      Youtube,
       this,
       calls,
       getContractByCodeHash
-    )) as TokenFaucetTypes.MultiCallResults<Calls>;
+    )) as YoutubeTypes.MultiCallResults<Calls>;
   }
 }

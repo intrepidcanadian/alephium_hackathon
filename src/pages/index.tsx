@@ -4,6 +4,8 @@ import styles from '@/styles/Home.module.css'
 import { TokenDapp } from '@/components/TokenDapp'
 import { AlephiumConnectButton, useWallet } from '@alephium/web3-react'
 import { tokenFaucetConfig } from '@/services/utils'
+import { LendingDapp} from '@/components/LendingDapp'
+
 
 export default function Home() {
   const { connectionStatus } = useWallet()
@@ -22,6 +24,7 @@ export default function Home() {
         {connectionStatus === 'connected' && (
           <TokenDapp config={tokenFaucetConfig} />
         )}
+          <LendingDapp config={tokenFaucetConfig}/>
       </div>
     </>
   )

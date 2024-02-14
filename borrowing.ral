@@ -1,0 +1,86 @@
+import "std/fungible_token_interface"
+
+// Token Builder
+// What we are writing is just a template. Sentence structure and blanks. When we deploy, we fill in some of these blanks
+
+Contract Youtube (
+    name: ByteVec, //ByteVec makes blockchain more efficient - it doesn't use strings
+    symbol: ByteVec, 
+    decimals: U256, 
+    supply: U256,
+    mut balance: U256
+) implements IFungibleToken {
+
+    // Events 
+    event Withdraw(user: Address, amount: U256)
+    event Deposit(user: Address, amount: U256)
+    event Devwithdraw(user: Address, amount: U256)
+
+    // Error Codes
+    enum ErrorCodes {
+        Invalidamount = 2
+    }
+
+    // public functions to to get token's symbol, name, decimals and supply
+    pub fn getSymbol() -> ByteVec {
+        return symbol
+    }
+
+    pub fn getName() -> ByteVec {
+        return name
+    }
+
+    pub fn getDecimals() -> U256 {
+        return decimals
+    }
+
+    pub fn getTotalSupply() -> U256 {
+        return supply
+    }
+
+    @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn withdraw(amount: U256) -> () { // Withdraw --> takes alph returns token
+        
+        assert!(amount == 1, ErrorCodes.Invalidamount)
+
+        let caller = callerAddress!() // caller address
+
+        balance = balance - 1
+
+        transferToken!(caller, selfAddress!(), ALPH, amount) // accepting payment 
+        transferToken!(selfAddress!(), caller, selfTokenId!(), amount) // we give token
+
+        emit Withdraw(caller, amount)
+
+    }
+
+    @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn deposit(amount: U256) -> () { // Deposit --> contract takes token, returns alph
+        
+        assert!(amount == 1, ErrorCodes.Invalidamount)
+
+        let caller = callerAddress!() // caller address
+
+        balance = balance + 1
+
+        transferToken!(selfAddress!(), caller, ALPH, amount) // accepting payment
+        transferToken!(caller, selfAddress!(), selfTokenId!(), amount) // we give token
+
+        emit Deposit(caller, amount)
+    }
+
+    @using(assetsInContract = true, updateFields = false, checkExternalCaller = false)
+    pub fn devwithdraw(amount: U256) -> () { // Dev withdraw --> take tokens
+
+        assert!(amount == 1, ErrorCodes.Invalidamount)
+
+        let caller = callerAddress!() // caller address
+
+        transferToken!(caller, selfAddress!(), ALPH, amount) // accepting payment
+        transferToken!(selfAddress!(), caller, selfTokenId!(), amount) // we give token
+
+        emit Devwithdraw(caller, amount)
+
+    }
+
+}

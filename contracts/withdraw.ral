@@ -6,3 +6,8 @@ TxScript Withdraw(token: TokenFaucet, amount: U256) {
     // Call token contract's withdraw function.
     token.withdraw(amount)
 }
+
+TxScript Deposit(token: TokenFaucet, amount: U256) {
+    // Call token contract's withdraw function.
+    token.deposit(amount)
+}
