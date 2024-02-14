@@ -22,9 +22,9 @@ export const LendingDapp: FC<LendingDappProps> = ({ config }) => {
     
     return (
         <>
-          <h1>Address: {account?.address ?? 'Loading...'}</h1>
-          <h2>Address Group: {config.groupIndex}</h2>
-          <BalanceDisplay balanceMap={balance} />
+          {/* <h1>Address: {account?.address ?? 'Loading...'}</h1>
+          <h2>Address Group: {config.groupIndex}</h2> */}
+          {/* <BalanceDisplay balanceMap={balance} /> */}
         </>
       );
     };

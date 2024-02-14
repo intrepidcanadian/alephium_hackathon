@@ -1,7 +1,7 @@
 {
   "version": "v2.5.3",
   "name": "Deposit",
-  "bytecodeTemplate": "01010300000005{1}0d0c{0}0106",
+  "bytecodeTemplate": "0101030000000ab4{1}13c41bc16d674ec800002aa2{1}0d0c{0}0106",
   "fieldsSig": {
     "names": [
       "token",

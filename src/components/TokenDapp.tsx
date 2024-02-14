@@ -49,7 +49,7 @@ export const TokenDapp: FC<{
     <>
       {ongoingTxId && <TxStatus txId={ongoingTxId} txStatusCallback={txStatusCallback} />}
 
-      {/* <div className="columns">
+      <div className="columns">
         <form onSubmit={handleWithdrawSubmit}>
           <>
             <h2 className={styles.title}>Alephium Token Faucet on {config.network}</h2>
@@ -83,7 +83,8 @@ export const TokenDapp: FC<{
             <input type="submit" disabled={!!ongoingTxId} value="Send Me Token" />
           </>
         </form>
-      </div> */}
+      </div>
+
       <div className="columns">
         <form onSubmit={handleDepositSubmit}>
           <>

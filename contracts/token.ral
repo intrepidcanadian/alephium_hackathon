@@ -69,7 +69,7 @@ Contract TokenFaucet(
         emit Withdraw(callerAddress!(), amount)
     }
 
-    @using(assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
     pub fn deposit(amount: U256) -> () {
         emit Debug(`The current balance is ${balance}`)
 

@@ -11,7 +11,7 @@
   "infos": {
     "Deposit": {
       "sourceFile": "withdraw.ral",
-      "sourceCodeHash": "1d26fe265d23e67f747bbeb29374996a9035c790b3d428bcb6fa9da9063982c8",
+      "sourceCodeHash": "c0b5fa6dc01bb90650f6890adbc7a425ee78e2c855420aa71c0e808440fcd01a",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -25,14 +25,14 @@
     },
     "TokenFaucet": {
       "sourceFile": "token.ral",
-      "sourceCodeHash": "176c3a0ab111e5f04fe358e305c5d1040a987ca1af2ed2607bfcebcfca20600f",
-      "bytecodeDebugPatch": "=20-2+67=2-2+a5=101+3a0007e02=1+75468652063757272656e742062616c616e63652069732000=57+5a0007e0217546865206=1+757272656e742062616c616e63652069732000=54",
-      "codeHashDebug": "798fbece156fa6c63fb0a55b18a94a58527cb5bb278f5cf4bb6f0246905047ae",
+      "sourceCodeHash": "bfe507ed18aff945c12680ca955d7666b1c9365947d862bfca23d16bff8b379d",
+      "bytecodeDebugPatch": "=20-4+6=1+4=1+aa=101+3a0007e02=1+75468652063757272656e742062616c616e63652069732000=57+8a0007e02175468652063757272=1+56e742062616c616e63652069732000=64",
+      "codeHashDebug": "4c4ad82adf4b20f1dd9cb7e62519aa918b69e49200848e2b703bf76e45117dc8",
       "warnings": []
     },
     "Withdraw": {
       "sourceFile": "withdraw.ral",
-      "sourceCodeHash": "1d26fe265d23e67f747bbeb29374996a9035c790b3d428bcb6fa9da9063982c8",
+      "sourceCodeHash": "c0b5fa6dc01bb90650f6890adbc7a425ee78e2c855420aa71c0e808440fcd01a",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []

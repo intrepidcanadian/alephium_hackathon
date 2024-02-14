@@ -9,6 +9,8 @@ export const BalanceDisplay: React.FC<BalanceDisplayProps> = ({ balanceMap }) =>
   const formatBalance = (amount: Number256) => {
     return prettifyAttoAlphAmount(amount) ?? 'Loading...';
   };
+  
+  // console.log(balanceMap)
 
   return (
     <div>
