@@ -79,7 +79,7 @@ Contract TokenFaucet(
         // transferToken!(selfAddress!(), caller, ALPH, amount) // sending token payment to contract
         // transferToken!(caller, selfAddress!(), selfTokenId!(), amount) // we get token for depositing
 
-        // transferTokenToSelf!(caller, ALPH, amount)
+        transferTokenToSelf!(caller, ALPH, amount)
         transferTokenFromSelf!(caller, selfTokenId!(), amount)
 
         balance = balance + amount
