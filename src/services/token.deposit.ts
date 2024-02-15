@@ -1,12 +1,15 @@
-import { DUST_AMOUNT, ExecuteScriptResult, SignerProvider } from '@alephium/web3'
+import { DUST_AMOUNT, ExecuteScriptResult, SignerProvider, prettifyAttoAlphAmount } from '@alephium/web3'
 import { Deposit } from '../../artifacts/ts/scripts'
 
 export const depositToken = async (signerProvider: SignerProvider, amount: string, tokenId: string): Promise<ExecuteScriptResult> => {
-  return await Deposit.execute(signerProvider, {
+    console.log(amount);
+    console.log(DUST_AMOUNT);
+
+    return await Deposit.execute(signerProvider, {
     initialFields: {
       token: tokenId,
-      amount: BigInt(amount)
+      amount: BigInt(amount * ONE_ALPH)
     },
-    attoAlphAmount: DUST_AMOUNT,
+    attoAlphAmount: amount + DUST_AMOUNT,
   })
 }

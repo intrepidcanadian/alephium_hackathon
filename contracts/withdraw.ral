@@ -8,5 +8,5 @@ TxScript Withdraw(token: TokenFaucet, amount: U256) {
 }
 
 TxScript Deposit(token: TokenFaucet, amount: U256) {
-    token.deposit{callerAddress!() -> ALPH: amount + 2 alph}(amount)
+    token.deposit{callerAddress!() -> ALPH: amount}(amount)
 }

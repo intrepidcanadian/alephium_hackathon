@@ -1,14 +1,33 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import { TokenDapp } from '@/components/TokenDapp'
 import { AlephiumConnectButton, useWallet } from '@alephium/web3-react'
+
+import { NodeProvider } from '@alephium/web3'
+
 import { tokenFaucetConfig } from '@/services/utils'
 import { LendingDapp} from '@/components/LendingDapp'
 
 
 export default function Home() {
-  const { connectionStatus } = useWallet()
+  const { connectionStatus } = useWallet();
+  const [height, setHeight] = useState(null);
+
+  // useEffect(() => {
+  //   const nodeProvider = new NodeProvider('http://localhost:22973');
+  //   const fetchHeight = async () => {
+  //     const height = await nodeProvider.blockflow.getBlockflowChainInfo({
+  //       fromGroup: 0,
+  //       toGroup: 0,
+  //     });
+  //     console.log('height', height);
+  //     setHeight(height);
+  //   };
+
+  //   fetchHeight();
+  // }, []); 
+
 
   return (
     <>

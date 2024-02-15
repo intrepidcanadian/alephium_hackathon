@@ -1,5 +1,5 @@
 {
-  "fullNodeVersion": "v2.5.3",
+  "fullNodeVersion": "v2.8.3",
   "compilerOptionsUsed": {
     "ignoreUnusedConstantsWarnings": false,
     "ignoreUnusedVariablesWarnings": false,
@@ -11,7 +11,7 @@
   "infos": {
     "Deposit": {
       "sourceFile": "withdraw.ral",
-      "sourceCodeHash": "c0b5fa6dc01bb90650f6890adbc7a425ee78e2c855420aa71c0e808440fcd01a",
+      "sourceCodeHash": "726eeadf2a06dad719da12a67db7435fe5d61cedca825f58ebc073f772ab3228",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
@@ -25,14 +25,14 @@
     },
     "TokenFaucet": {
       "sourceFile": "token.ral",
-      "sourceCodeHash": "bfe507ed18aff945c12680ca955d7666b1c9365947d862bfca23d16bff8b379d",
+      "sourceCodeHash": "9fa9c61f8959d6334d05f3adfeb539817e764e5a1c441779b026a14ea36a58b6",
       "bytecodeDebugPatch": "=20-4+6=1+4=1+aa=101+3a0007e02=1+75468652063757272656e742062616c616e63652069732000=57+8a0007e02175468652063757272=1+56e742062616c616e63652069732000=64",
       "codeHashDebug": "4c4ad82adf4b20f1dd9cb7e62519aa918b69e49200848e2b703bf76e45117dc8",
       "warnings": []
     },
     "Withdraw": {
       "sourceFile": "withdraw.ral",
-      "sourceCodeHash": "c0b5fa6dc01bb90650f6890adbc7a425ee78e2c855420aa71c0e808440fcd01a",
+      "sourceCodeHash": "726eeadf2a06dad719da12a67db7435fe5d61cedca825f58ebc073f772ab3228",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []

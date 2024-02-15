@@ -60,6 +60,7 @@ Contract TokenFaucet(
 
         // Make sure the amount is valid
         assert!(amount <= 2, ErrorCodes.InvalidWithdrawAmount)
+
         // Functions postfixed with `!` are built-in functions.
         transferTokenFromSelf!(callerAddress!(), selfTokenId!(), amount)
         // Ralph does not allow underflow.

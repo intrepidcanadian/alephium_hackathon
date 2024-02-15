@@ -12,11 +12,11 @@ const deployFaucet: DeployFunction<Settings> = async (
   const issueTokenAmount = network.settings.issueTokenAmount
   const result = await deployer.deployContract(TokenFaucet, {
     // The amount of token to be issued
-    issueTokenAmount: issueTokenAmount,
+    issueTokenAmount: issueTokenAmount, 
     // The initial states of the faucet contract
     initialFields: {
-      symbol: Buffer.from('TF', 'utf8').toString('hex'),
-      name: Buffer.from('TokenFaucet', 'utf8').toString('hex'),
+      symbol: Buffer.from('TFT', 'utf8').toString('hex'),
+      name: Buffer.from('Test', 'utf8').toString('hex'),
       decimals: 0n,
       supply: issueTokenAmount,
       balance: issueTokenAmount

@@ -5,7 +5,7 @@ import { withdrawToken } from '@/services/token.service'
 import { depositToken } from '@/services/token.deposit'
 import { TxStatus } from './TxStatus'
 import { useWallet } from '@alephium/web3-react'
-import { node } from "@alephium/web3"
+import { node, DUST_AMOUNT, prettifyAttoAlphAmount, ONE_ALPH } from "@alephium/web3"
 import { TokenFaucetConfig } from '@/services/utils'
 
 export const TokenDapp: FC<{
@@ -20,18 +20,33 @@ export const TokenDapp: FC<{
   const handleWithdrawSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (signer) {
+      console.log(withdrawAmount)
       const result = await withdrawToken(signer, withdrawAmount, config.faucetTokenId)
       setOngoingTxId(result.txId)
     }
   }
 
   const handleDepositSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (signer) {
-      const result = await depositToken(signer, depositAmount, config.faucetTokenId)
-      setOngoingTxId(result.txId)
+
+      const depositAmountInSmallestUnit = BigInt(Math.floor(parseFloat(depositAmount) * 1e18));
+      const adjustedAmount = depositAmountInSmallestUnit + BigInt(DUST_AMOUNT);
+
+      console.log("depositAmount", depositAmount)
+      console.log("depositAmountInSmallestUnit", depositAmountInSmallestUnit)
+      console.log("prettyprettifyAttoAlphAmount(depositAmountInSmallestUnit)", prettifyAttoAlphAmount(depositAmountInSmallestUnit))
+      console.log("prettyprettifyAttoAlphAmount(DUST_AMOUNT)", prettifyAttoAlphAmount(DUST_AMOUNT))
+      console.log("DUST_AMOUNT", DUST_AMOUNT)
+      console.log("BigInt(depositAmount)", BigInt(depositAmount))
+      console.log("adjustedAmount", adjustedAmount)
+      console.log("adjustedAmount.toString()", adjustedAmount.toString())
+
+
+      const result = await depositToken(signer, depositAmount, config.faucetTokenId);
+      setOngoingTxId(result.txId);
     }
-  }
+  };
 
   const txStatusCallback = useCallback(async (status: node.TxStatus, numberOfChecks: number): Promise<any> => {
     if (
@@ -80,7 +95,7 @@ export const TokenDapp: FC<{
               onChange={(e) => setWithdrawAmount(e.target.value)}
             />
             <br />  
-            <input type="submit" disabled={!!ongoingTxId} value="Send Me Token" />
+            <input type="submit" value="Send Me Token" />
           </>
         </form>
       </div>
@@ -116,7 +131,7 @@ export const TokenDapp: FC<{
               onChange={(e) => setDepositAmount(e.target.value)}
             />
             <br />  
-            <input type="submit" disabled={!!ongoingTxId} value="Deposit Token" />
+            <input type="submit" value="Deposit Token" />
           </>
         </form>
       </div>
