@@ -1,12 +1,16 @@
-
-Loading alephium config file: /Users/tonylau/Documents/Alephium/nextjs-template/alephium.config.ts
-Contracts are compiled already. Loading them from folder "artifacts"
-The deployment of contract TokenFaucet is skipped as it has been deployed
-Token faucet contract id: 0e72fa66049324321c591ba09bb57820a0fb77a5810af8e8f29144c928d64200
-Token faucet contract address: ufMWQ9X4V6HWPjZ4wG7naxz5N5RD1EY8Vp1Gm55wWEWs
-
 Deploying contract TokenFaucet
 Deployer - group 0 - 1DrDyTr9RpRsQnDnXo2YRiPzPW4ooHX5LLoqXrqfMrpQH
-Token faucet contract id: 09936ddfff5f5f6ba892a2f25b2904a7727ed167ef5c496f16f4cc03c4cb3900
-Token faucet contract address: uLLAm8iT6n6iTXc33hjpgFZWKk8PypNuxbM868AFdyD9
-✅ Scripts deployment executed!
+Token faucet contract id: 113d97de2a38a58699fd1d2b30d73c3e5b1263330bf1664ffb4726b9a54a1700
+Token faucet contract address: urFWwCPtgTU6JZB5ocB4QhVEncCP3c7Jh5ZzDnb6Szrj
+Deploying contract SubjectSharesBalance
+Deployer - group 0 - 1DrDyTr9RpRsQnDnXo2YRiPzPW4ooHX5LLoqXrqfMrpQH
+SubjectSharesBalance template contract id: 5e440808bfc3227fc8a8c538797ab739440b191dd95137f1a0e9a8ba3f628500
+SubjectSharesBalance template contract address: 212vbxinYT7xNavHS7ULN5xnZhk95GaLMRgyypC4LCHHR
+Deploying contract SubjectShares
+Deployer - group 0 - 1DrDyTr9RpRsQnDnXo2YRiPzPW4ooHX5LLoqXrqfMrpQH
+SubjectShares template contract id: 44ab0c921dd2a409125314fe109e4404640ce418036daef6f040009c7c276c00
+SubjectShares template contract address: yK17Vr9WT87uU3PPZMkRHkFG48KXQizE4jpgLRCiU6cw
+Deploying contract FriendTech
+Deployer - group 0 - 1DrDyTr9RpRsQnDnXo2YRiPzPW4ooHX5LLoqXrqfMrpQH
+FriendTech contract id: 419f6209e733c02b934d2748a369104690e1f7923e6566060e56102b601ed600
+FriendTech contract address: y77a8yXo1RHYejbSr5Pc2Y7M2JHUhCytKMVkQFz4mqxT

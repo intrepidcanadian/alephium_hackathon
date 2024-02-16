@@ -10,7 +10,7 @@ export const BalanceDisplay: React.FC<BalanceDisplayProps> = ({ balanceMap }) =>
     return prettifyAttoAlphAmount(amount) ?? 'Loading...';
   };
   
-  // console.log(balanceMap)
+  console.log(balanceMap)
 
   return (
     <div>

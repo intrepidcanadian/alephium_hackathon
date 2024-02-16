@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react'
-import { FC, useState } from 'react'
+import { FC, useState, useEffect } from 'react'
 import styles from '../styles/Home.module.css'
 import { withdrawToken } from '@/services/token.service'
 import { depositToken } from '@/services/token.deposit'
 import { TxStatus } from './TxStatus'
-import { useWallet } from '@alephium/web3-react'
+import { useWallet, useBalance} from '@alephium/web3-react'
 import { node, DUST_AMOUNT, prettifyAttoAlphAmount, ONE_ALPH } from "@alephium/web3"
 import { TokenFaucetConfig } from '@/services/utils'
+import { LendingDapp} from '@/components/LendingDapp'
 
 export const TokenDapp: FC<{
   config: TokenFaucetConfig
@@ -16,6 +17,18 @@ export const TokenDapp: FC<{
   const [withdrawAmount, setWithdrawAmount] = useState('')
   const [depositAmount, setDepositAmount] = useState('')
   const [ongoingTxId, setOngoingTxId] = useState<string>()
+  const { balance } = useBalance()
+
+  console.log('balance', balance)
+
+  if (signer) {
+    // const groupBalance = balance.get(config.tokenFaucetAddress)
+    // const groupBalance2 = balance.get(config.faucetTokenId)
+    // What is the difference between faucet address and token id?
+    console.log("groupBalance", config.tokenFaucetAddress)
+    console.log("groupBalance2", config.faucetTokenId)
+    console.log(addressGroup)
+  }
 
   const handleWithdrawSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -135,6 +148,7 @@ export const TokenDapp: FC<{
           </>
         </form>
       </div>
+      {/* <LendingDapp config={config} /> */}
     </>
   )
 }

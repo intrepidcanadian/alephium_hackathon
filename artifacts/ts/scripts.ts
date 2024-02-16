@@ -11,13 +11,41 @@ import {
   SignerProvider,
   HexString,
 } from "@alephium/web3";
-import { default as DepositScriptJson } from "../Deposit.ral.json";
-import { default as WithdrawScriptJson } from "../Withdraw.ral.json";
+import { default as BuySharesScriptJson } from "../scripts/BuyShares.ral.json";
+import { default as DepositScriptJson } from "../scripts/Deposit.ral.json";
+import { default as SellSharesScriptJson } from "../scripts/SellShares.ral.json";
+import { default as SetProtocolFeePercentScriptJson } from "../scripts/SetProtocolFeePercent.ral.json";
+import { default as SetSubjectFeePercentScriptJson } from "../scripts/SetSubjectFeePercent.ral.json";
+import { default as UpdateOwnerScriptJson } from "../scripts/UpdateOwner.ral.json";
+import { default as WithdrawScriptJson } from "../scripts/Withdraw.ral.json";
 
+export const BuyShares = new ExecutableScript<{
+  subject: Address;
+  amount: bigint;
+  totalPayment: bigint;
+  friendTech: HexString;
+}>(Script.fromJson(BuySharesScriptJson));
 export const Deposit = new ExecutableScript<{
   token: HexString;
   amount: bigint;
 }>(Script.fromJson(DepositScriptJson));
+export const SellShares = new ExecutableScript<{
+  subject: Address;
+  amount: bigint;
+  friendTech: HexString;
+}>(Script.fromJson(SellSharesScriptJson));
+export const SetProtocolFeePercent = new ExecutableScript<{
+  feePercent: bigint;
+  friendTech: HexString;
+}>(Script.fromJson(SetProtocolFeePercentScriptJson));
+export const SetSubjectFeePercent = new ExecutableScript<{
+  feePercent: bigint;
+  friendTech: HexString;
+}>(Script.fromJson(SetSubjectFeePercentScriptJson));
+export const UpdateOwner = new ExecutableScript<{
+  newOwner: Address;
+  friendTech: HexString;
+}>(Script.fromJson(UpdateOwnerScriptJson));
 export const Withdraw = new ExecutableScript<{
   token: HexString;
   amount: bigint;

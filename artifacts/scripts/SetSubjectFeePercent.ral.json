@@ -1,0 +1,31 @@
+{
+  "version": "v2.8.3",
+  "name": "SetSubjectFeePercent",
+  "bytecodeTemplate": "01010300000005{0}0d0c{1}0101",
+  "fieldsSig": {
+    "names": [
+      "feePercent",
+      "friendTech"
+    ],
+    "types": [
+      "U256",
+      "ByteVec"
+    ],
+    "isMutable": [
+      false,
+      false
+    ]
+  },
+  "functions": [
+    {
+      "name": "main",
+      "usePreapprovedAssets": true,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": []
+    }
+  ]
+}

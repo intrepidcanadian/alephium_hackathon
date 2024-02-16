@@ -2,5 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+export * from "./FriendTech";
+export * from "./SubjectShares";
+export * from "./SubjectSharesBalance";
 export * from "./TokenFaucet";
 export * from "./scripts";
