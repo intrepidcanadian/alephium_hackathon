@@ -58,7 +58,7 @@ Contract TokenFaucet(
         // Debug events can be helpful for error analysis
         emit Debug(`The current balance is ${balance}`)
 
-        // Make sure the amount is valid
+        // Make sure the amount is valid 
         assert!(amount <= 2, ErrorCodes.InvalidWithdrawAmount)
 
         // Functions postfixed with `!` are built-in functions.

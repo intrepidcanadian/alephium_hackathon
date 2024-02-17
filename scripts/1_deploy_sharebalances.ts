@@ -3,8 +3,6 @@ import { randomContractAddress, randomContractId } from '@alephium/web3-test'
 import { Settings } from '../alephium.config'
 import { SubjectSharesBalance } from '../artifacts/ts'
 
-// This deploy function will be called by cli deployment tool automatically
-// Note that deployment scripts should prefixed with numbers (starting from 0)
 const deploySubjectSharesBalanceTemplate: DeployFunction<Settings> = async (
   deployer: Deployer,
   network: Network<Settings>

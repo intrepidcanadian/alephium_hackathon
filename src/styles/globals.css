@@ -37,7 +37,7 @@
   --line-height: 1.5;
   --width-card: 285px;
   --width-card-medium: 460px;
-  --width-card-wide: 800px;
+  --width-card-wide: 1200;
   --width-content: 1080px;
 }
 
@@ -72,6 +72,7 @@ body {
   margin: 0;
   overflow-x: hidden;
   padding: 0;
+  display: flex;
 }
 
 footer,

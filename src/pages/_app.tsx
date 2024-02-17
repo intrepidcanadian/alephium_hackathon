@@ -7,8 +7,13 @@ import { tokenFaucetConfig } from '@/services/utils'
 export default function App({ Component, pageProps }: AppProps) {
 
   return (
-    <AlephiumWalletProvider theme="web95" network={tokenFaucetConfig.network} addressGroup={tokenFaucetConfig.groupIndex}>
-      <Component {...pageProps} />
-    </AlephiumWalletProvider>
+    
+      <AlephiumWalletProvider theme="retro" network={tokenFaucetConfig.network} addressGroup={tokenFaucetConfig.groupIndex}>
+        <Component {...pageProps} />
+      </AlephiumWalletProvider>
+  
   )
 }
+
+// The type of theme 
+// export type ProviderTheme = 'simple-light' | 'simple-dark' | 'web95' | 'retro' | 'soft' | 'midnight' | 'minimal' | 'rounded' | 'nouns';

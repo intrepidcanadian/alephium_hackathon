@@ -25,7 +25,7 @@
     },
     "FriendTech": {
       "sourceFile": "Friendtech.ral",
-      "sourceCodeHash": "5214e9e2f6613c2bf1536972591b9fbd7c65e9aed55d9723c7000724d3b26a4c",
+      "sourceCodeHash": "9fe3897ec0366f1d429d9cfa3b34d5311b06525112f6ae2320b2f53545748a41",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "048266521a0ba2d6202da7c6cdc1c5a3bea33de828923f7de087c54c7c909382",
       "warnings": []
@@ -60,7 +60,7 @@
     },
     "SubjectShares": {
       "sourceFile": "Subjectshares.ral",
-      "sourceCodeHash": "4a74f21c7eb02ea17e9c4383b04c29d62e9c3c1aeb4e597d194e88ec0f285613",
+      "sourceCodeHash": "835f998121a6f45369f19f94117ab658c5f275e9b4dc7495b989d61259501737",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "390262034f6249e2ded2c2615ffe5cd4990183176bc6c40fe6728a6705c79465",
       "warnings": []
@@ -74,7 +74,7 @@
     },
     "TokenFaucet": {
       "sourceFile": "token.ral",
-      "sourceCodeHash": "62ee731ab86dab23f4f48e9a37b1ecc4164400e34f6534e2b37d202b21beff24",
+      "sourceCodeHash": "7e8ec5098ba212a36bcd78090ad7bdfe4aea7402bffe470544bd126f8e70161d",
       "bytecodeDebugPatch": "=20-4+6=1+4=1+aa=101+3a0007e02=1+75468652063757272656e742062616c616e63652069732000=57+8a0007e02175468652063757272=1+56e742062616c616e63652069732000=64",
       "codeHashDebug": "4c4ad82adf4b20f1dd9cb7e62519aa918b69e49200848e2b703bf76e45117dc8",
       "warnings": []
