@@ -1,3 +1,11 @@
+****Leveraged the alephium template for the hackathon
+
+Video of hackathon submission: https://www.loom.com/share/ef81afcb9a7b4df6bd152591af686d92?sid=015e3e39-6984-4a1d-a662-25a7f0c3acfc
+
+Github: https://github.com/intrepidcanadian/alephium_hackathon
+
+
+
 This is a Alephium template project for the
 [Next.js](https://nextjs.org/) framework, it is bootstrapped with the
 following command:
