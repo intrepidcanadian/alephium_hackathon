@@ -1,0 +1,64 @@
+Contract TokenShares(
+    tokenSharesBalanceTemplateId: ByteVec,
+    tokencollateral: Address,
+    collateralContractId: ByteVec,
+    mut subjectOwnBalance: U256,
+    mut supply: U256
+) {
+    enum ErrorCodes {
+        CollateralContractAllowedOnly = 0
+        NotEnoughBalance = 1
+    }
+
+   pub fn getSupply() -> U256 {
+      return supply
+   }
+
+   pub fn getBalance(holder: Address) -> U256 {
+       if (holder == tokencollateral) {
+           return subjectOwnBalance
+       }
+
+       let tokenSharesBalanceContractId = subContractId!(toByteVec!(holder))
+       return if (contractExists!(tokenSharesBalanceContractId)) TokenSharesBalance(tokenSharesBalanceContractId).getBalance() else 0
+   }
+
+   @using(preapprovedAssets = true, assetsInContract = true, updateFields = true)
+   pub fn buy(holder: Address, amount: U256, subjectFee: U256) -> () {
+        checkCaller!(callerContractId!() == collateralContractId, ErrorCodes.CollateralContractAllowedOnly)
+        supply = supply + amount
+
+        if (holder == tokencollateral) {
+          subjectOwnBalance = subjectOwnBalance + amount
+        } else {
+          let tokenSharesBalanceContractId = subContractId!(toByteVec!(holder))
+          if (contractExists!(tokenSharesBalanceContractId)) {
+              TokenSharesBalance(tokenSharesBalanceContractId).addBalance(amount)
+          } else {
+              let (encodedImmutableFields, encodedMutableFields) = TokenSharesBalance.encodeFields!(tokencollateral, selfContractId!(), amount)
+              copyCreateSubContract!{holder -> ALPH: 1 alph}(
+                  toByteVec!(holder),
+                  tokenSharesBalanceTemplateId,
+                  encodedImmutableFields,
+                  encodedMutableFields
+              )
+          }
+        }
+
+       transferToken!(holder, selfAddress!(), ALPH, subjectFee)
+   }
+
+   @using(preapprovedAssets = true, assetsInContract = true, updateFields = true)
+   pub fn sell(seller: Address, amount: U256, subjectFee: U256) -> () {
+       checkCaller!(callerContractId!() == collateralContractId, ErrorCodes.CollateralContractAllowedOnly)
+       assert!(supply > amount, ErrorCodes.NotEnoughBalance)
+       supply = supply - amount
+
+    //    find the seller's contract id
+       let subjectSharesBalanceContractId = subContractId!(toByteVec!(seller))
+    //    tokensharebalance contract that is being reference
+       let tokenSharesBalanceContract = TokenSharesBalance(subjectSharesBalanceContractId)
+       tokenSharesBalanceContract.reduceBalance(amount)
+       transferToken!(callerAddress!(), selfAddress!(), ALPH, subjectFee)
+   }
+}

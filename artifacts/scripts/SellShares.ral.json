@@ -1,12 +1,12 @@
 {
   "version": "v2.8.3",
   "name": "SellShares",
-  "bytecodeTemplate": "01010300000006{0}{1}0e0c{2}0106",
+  "bytecodeTemplate": "01010300000006{0}{1}0e0c{2}011e",
   "fieldsSig": {
     "names": [
       "subject",
       "amount",
-      "friendTech"
+      "borrowing"
     ],
     "types": [
       "Address",

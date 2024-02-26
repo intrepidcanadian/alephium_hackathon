@@ -6,8 +6,15 @@ export type Settings = {
   issueTokenAmount: Number256
   protocolFeePercent: Number256
   subjectFeePercent: Number256
+  issuedtokens: Number256
+  utilization: Number256
 }
-const defaultSettings: Settings = { issueTokenAmount: 100n, protocolFeePercent: 500n, subjectFeePercent: 600n}
+const defaultSettings: Settings = 
+{ issueTokenAmount: 100n, 
+  issuedtokens: 0n, 
+  utilization: 0n,
+  protocolFeePercent: 500n, 
+  subjectFeePercent: 600n}
 
 const configuration: Configuration<Settings> = {
   networks: {

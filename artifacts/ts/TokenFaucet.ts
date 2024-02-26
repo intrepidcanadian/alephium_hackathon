@@ -33,14 +33,41 @@ export namespace TokenFaucetTypes {
     symbol: HexString;
     name: HexString;
     decimals: bigint;
-    supply: bigint;
-    balance: bigint;
+    contractId: HexString;
+    owner: Address;
+    totalsupply: bigint;
+    accumulatedinterest: bigint;
+    lastblocktimestamp: bigint;
+    issuedtokens: bigint;
+    balanceofTokens: bigint;
+    utilization: bigint;
+    targetutilization: bigint;
+    baseborrowrate: bigint;
+    tokenSharesTemplateId: HexString;
+    tokenSharesBalanceTemplateId: HexString;
+    totalProtocolFee: bigint;
+    protocolFeePercent: bigint;
+    subjectFeePercent: bigint;
   };
 
   export type State = ContractState<Fields>;
 
   export type WithdrawEvent = ContractEvent<{ to: Address; amount: bigint }>;
   export type DepositEvent = ContractEvent<{ from: Address; amount: bigint }>;
+  export type TradeEvent = ContractEvent<{
+    trader: Address;
+    tokencurrency: Address;
+    isBuy: boolean;
+    shareAmount: bigint;
+    alphAmount: bigint;
+    protocolAlphAmount: bigint;
+    subjectAlphAmount: bigint;
+    supply: bigint;
+  }>;
+  export type OwnerUpdatedEvent = ContractEvent<{
+    previous: Address;
+    new: Address;
+  }>;
 
   export interface CallMethodTable {
     getSymbol: {
@@ -59,8 +86,76 @@ export namespace TokenFaucetTypes {
       params: Omit<CallContractParams<{}>, "args">;
       result: CallContractResult<bigint>;
     };
-    balance: {
+    getBalanceofTokens: {
       params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getSelfContractId: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getDeployedContractID: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getSelfTokenId: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<HexString>;
+    };
+    getSelfAddress: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<Address>;
+    };
+    getTargetUtilization: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getBaseBorrowRate: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getIssuedTokens: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getUtilization: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getInterest: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getBlockTimeStamp: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getAccruedInterest: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getLastBlockTimeStamp: {
+      params: Omit<CallContractParams<{}>, "args">;
+      result: CallContractResult<bigint>;
+    };
+    getPrice: {
+      params: CallContractParams<{ supply: bigint; amount: bigint }>;
+      result: CallContractResult<bigint>;
+    };
+    getBuyPrice: {
+      params: CallContractParams<{ tokenShares: Address; amount: bigint }>;
+      result: CallContractResult<bigint>;
+    };
+    getSellPrice: {
+      params: CallContractParams<{ tokenShares: Address; amount: bigint }>;
+      result: CallContractResult<bigint>;
+    };
+    getSupply: {
+      params: CallContractParams<{ tokenShares: Address }>;
+      result: CallContractResult<bigint>;
+    };
+    getBalance: {
+      params: CallContractParams<{ tokenShares: Address; holder: Address }>;
       result: CallContractResult<bigint>;
     };
   }
@@ -86,11 +181,15 @@ class Factory extends ContractFactory<
     return this.contract.getInitialFieldsWithDefaultValues() as TokenFaucetTypes.Fields;
   }
 
-  eventIndex = { Withdraw: 0, Deposit: 1 };
+  eventIndex = { Withdraw: 0, Deposit: 1, Trade: 2, OwnerUpdated: 3 };
   consts = {
     ErrorCodes: {
       InvalidWithdrawAmount: BigInt(0),
-      InvalidDepositamount: BigInt(1),
+      OwnerAllowedOnly: BigInt(2),
+      TokenAllowedFirstShareOnly: BigInt(3),
+      InsufficientShares: BigInt(4),
+      NoShareForTheSubject: BigInt(5),
+      CanNotSellLastShare: BigInt(6),
     },
   };
 
@@ -131,13 +230,130 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResult<bigint>> => {
       return testMethod(this, "getTotalSupply", params);
     },
-    balance: async (
+    getBalanceofTokens: async (
       params: Omit<
         TestContractParams<TokenFaucetTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResult<bigint>> => {
-      return testMethod(this, "balance", params);
+      return testMethod(this, "getBalanceofTokens", params);
+    },
+    getSelfContractId: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<HexString>> => {
+      return testMethod(this, "getSelfContractId", params);
+    },
+    getDeployedContractID: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<HexString>> => {
+      return testMethod(this, "getDeployedContractID", params);
+    },
+    getSelfTokenId: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<HexString>> => {
+      return testMethod(this, "getSelfTokenId", params);
+    },
+    getSelfAddress: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<Address>> => {
+      return testMethod(this, "getSelfAddress", params);
+    },
+    getTargetUtilization: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getTargetUtilization", params);
+    },
+    getBaseBorrowRate: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getBaseBorrowRate", params);
+    },
+    getIssuedTokens: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getIssuedTokens", params);
+    },
+    updateOwner: async (
+      params: TestContractParams<TokenFaucetTypes.Fields, { newOwner: Address }>
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "updateOwner", params);
+    },
+    getUtilization: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getUtilization", params);
+    },
+    setBaseBorrowRate: async (
+      params: TestContractParams<
+        TokenFaucetTypes.Fields,
+        { feePercent: bigint }
+      >
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "setBaseBorrowRate", params);
+    },
+    setTargetUtilization: async (
+      params: TestContractParams<
+        TokenFaucetTypes.Fields,
+        { targetPercent: bigint }
+      >
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "setTargetUtilization", params);
+    },
+    getInterest: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getInterest", params);
+    },
+    getBlockTimeStamp: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getBlockTimeStamp", params);
+    },
+    getAccruedInterest: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getAccruedInterest", params);
+    },
+    getLastBlockTimeStamp: async (
+      params: Omit<
+        TestContractParams<TokenFaucetTypes.Fields, never>,
+        "testArgs"
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getLastBlockTimeStamp", params);
     },
     withdraw: async (
       params: TestContractParams<TokenFaucetTypes.Fields, { amount: bigint }>
@@ -149,6 +365,83 @@ class Factory extends ContractFactory<
     ): Promise<TestContractResult<null>> => {
       return testMethod(this, "deposit", params);
     },
+    setProtocolFeePercent: async (
+      params: TestContractParams<
+        TokenFaucetTypes.Fields,
+        { feePercent: bigint }
+      >
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "setProtocolFeePercent", params);
+    },
+    setSubjectFeePercent: async (
+      params: TestContractParams<
+        TokenFaucetTypes.Fields,
+        { feePercent: bigint }
+      >
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "setSubjectFeePercent", params);
+    },
+    getPrice: async (
+      params: TestContractParams<
+        TokenFaucetTypes.Fields,
+        { supply: bigint; amount: bigint }
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getPrice", params);
+    },
+    getBuyPrice: async (
+      params: TestContractParams<
+        TokenFaucetTypes.Fields,
+        { tokenShares: Address; amount: bigint }
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getBuyPrice", params);
+    },
+    getSellPrice: async (
+      params: TestContractParams<
+        TokenFaucetTypes.Fields,
+        { tokenShares: Address; amount: bigint }
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getSellPrice", params);
+    },
+    getSupply: async (
+      params: TestContractParams<
+        TokenFaucetTypes.Fields,
+        { tokenShares: Address }
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getSupply", params);
+    },
+    getBalance: async (
+      params: TestContractParams<
+        TokenFaucetTypes.Fields,
+        { tokenShares: Address; holder: Address }
+      >
+    ): Promise<TestContractResult<bigint>> => {
+      return testMethod(this, "getBalance", params);
+    },
+    buyShares: async (
+      params: TestContractParams<
+        TokenFaucetTypes.Fields,
+        { tokenShares: Address; amount: bigint }
+      >
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "buyShares", params);
+    },
+    sellShares: async (
+      params: TestContractParams<
+        TokenFaucetTypes.Fields,
+        { tokenShares: Address; amount: bigint }
+      >
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "sellShares", params);
+    },
+    withdrawProtocolFee: async (
+      params: TestContractParams<TokenFaucetTypes.Fields, { to: Address }>
+    ): Promise<TestContractResult<null>> => {
+      return testMethod(this, "withdrawProtocolFee", params);
+    },
   };
 }
 
@@ -156,8 +449,8 @@ class Factory extends ContractFactory<
 export const TokenFaucet = new Factory(
   Contract.fromJson(
     TokenFaucetContractJson,
-    "=20-4+6=1+4=1+aa=101+3a0007e02=1+75468652063757272656e742062616c616e63652069732000=57+8a0007e02175468652063757272=1+56e742062616c616e63652069732000=64",
-    "4c4ad82adf4b20f1dd9cb7e62519aa918b69e49200848e2b703bf76e45117dc8"
+    "=82-5=1+6=2-2=1-3+9=2-1+5=3-6+69=3-1+3=2-1+e=2-2+2=3+30f=1+32=2+3f9=1+48=1-1+449a=845+ea0047e02175468652063757272656e742062616=1+616e63652069732000=111+c=1+0047e02175468652063757272656e742062616c616e63652069732000=1282",
+    "78fa30f0f5c9058a6bac9f226020bacc1ebbe5f519d992f4219e706a907f420b"
   )
 );
 
@@ -201,9 +494,38 @@ export class TokenFaucetInstance extends ContractInstance {
     );
   }
 
+  subscribeTradeEvent(
+    options: EventSubscribeOptions<TokenFaucetTypes.TradeEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      TokenFaucet.contract,
+      this,
+      options,
+      "Trade",
+      fromCount
+    );
+  }
+
+  subscribeOwnerUpdatedEvent(
+    options: EventSubscribeOptions<TokenFaucetTypes.OwnerUpdatedEvent>,
+    fromCount?: number
+  ): EventSubscription {
+    return subscribeContractEvent(
+      TokenFaucet.contract,
+      this,
+      options,
+      "OwnerUpdated",
+      fromCount
+    );
+  }
+
   subscribeAllEvents(
     options: EventSubscribeOptions<
-      TokenFaucetTypes.WithdrawEvent | TokenFaucetTypes.DepositEvent
+      | TokenFaucetTypes.WithdrawEvent
+      | TokenFaucetTypes.DepositEvent
+      | TokenFaucetTypes.TradeEvent
+      | TokenFaucetTypes.OwnerUpdatedEvent
     >,
     fromCount?: number
   ): EventSubscription {
@@ -260,14 +582,201 @@ export class TokenFaucetInstance extends ContractInstance {
         getContractByCodeHash
       );
     },
-    balance: async (
-      params?: TokenFaucetTypes.CallMethodParams<"balance">
-    ): Promise<TokenFaucetTypes.CallMethodResult<"balance">> => {
+    getBalanceofTokens: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getBalanceofTokens">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getBalanceofTokens">> => {
       return callMethod(
         TokenFaucet,
         this,
-        "balance",
+        "getBalanceofTokens",
         params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getSelfContractId: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getSelfContractId">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getSelfContractId">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getSelfContractId",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getDeployedContractID: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getDeployedContractID">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getDeployedContractID">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getDeployedContractID",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getSelfTokenId: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getSelfTokenId">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getSelfTokenId">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getSelfTokenId",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getSelfAddress: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getSelfAddress">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getSelfAddress">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getSelfAddress",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getTargetUtilization: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getTargetUtilization">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getTargetUtilization">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getTargetUtilization",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getBaseBorrowRate: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getBaseBorrowRate">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getBaseBorrowRate">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getBaseBorrowRate",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getIssuedTokens: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getIssuedTokens">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getIssuedTokens">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getIssuedTokens",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getUtilization: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getUtilization">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getUtilization">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getUtilization",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getInterest: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getInterest">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getInterest">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getInterest",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getBlockTimeStamp: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getBlockTimeStamp">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getBlockTimeStamp">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getBlockTimeStamp",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getAccruedInterest: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getAccruedInterest">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getAccruedInterest">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getAccruedInterest",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getLastBlockTimeStamp: async (
+      params?: TokenFaucetTypes.CallMethodParams<"getLastBlockTimeStamp">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getLastBlockTimeStamp">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getLastBlockTimeStamp",
+        params === undefined ? {} : params,
+        getContractByCodeHash
+      );
+    },
+    getPrice: async (
+      params: TokenFaucetTypes.CallMethodParams<"getPrice">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getPrice">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getPrice",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getBuyPrice: async (
+      params: TokenFaucetTypes.CallMethodParams<"getBuyPrice">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getBuyPrice">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getBuyPrice",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getSellPrice: async (
+      params: TokenFaucetTypes.CallMethodParams<"getSellPrice">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getSellPrice">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getSellPrice",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getSupply: async (
+      params: TokenFaucetTypes.CallMethodParams<"getSupply">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getSupply">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getSupply",
+        params,
+        getContractByCodeHash
+      );
+    },
+    getBalance: async (
+      params: TokenFaucetTypes.CallMethodParams<"getBalance">
+    ): Promise<TokenFaucetTypes.CallMethodResult<"getBalance">> => {
+      return callMethod(
+        TokenFaucet,
+        this,
+        "getBalance",
+        params,
         getContractByCodeHash
       );
     },

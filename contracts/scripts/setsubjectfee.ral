@@ -1,3 +1,0 @@
-TxScript SetSubjectFeePercent(feePercent: U256, friendTech: FriendTech) {
-    friendTech.setSubjectFeePercent(feePercent)
-}

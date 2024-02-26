@@ -1,3 +1,0 @@
-TxScript UpdateOwner(newOwner: Address, friendTech: FriendTech) {
-    friendTech.updateOwner(newOwner)
-}

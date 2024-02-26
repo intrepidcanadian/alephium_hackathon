@@ -1,16 +1,14 @@
+Loading alephium config file: /Users/tonylau/Documents/Alephium/nextjs-template/alephium.config.ts
+Contracts are compiled already. Loading them from folder "artifacts"
+Deploying contract TokenSharesBalance
+Deployer - group 0 - 1DrDyTr9RpRsQnDnXo2YRiPzPW4ooHX5LLoqXrqfMrpQH
+TokenSharesBalance template contract id: 3763b4b4586df8d1a7964a7eddf405c35de976c4fbc1a3b6b79cc78db8dbc800
+TokenSharesBalance template contract address: xRAiWR3DAVUb7g8qRkS2DVNMjm11bRfBVwhbysMg4vMV
+Deploying contract TokenShares
+Deployer - group 0 - 1DrDyTr9RpRsQnDnXo2YRiPzPW4ooHX5LLoqXrqfMrpQH
+TokenShares template contract id: 95771586e5a2910ce6a73deb0bb0814d706085e46e63aa4faa5dce820cfa5b00
+TokenShares template contract address: 24kQBHqhDzC5dAcKueqyfWC2mqZvXDqYDudxHjj4dUPqq
 Deploying contract TokenFaucet
 Deployer - group 0 - 1DrDyTr9RpRsQnDnXo2YRiPzPW4ooHX5LLoqXrqfMrpQH
-Token faucet contract id: 113d97de2a38a58699fd1d2b30d73c3e5b1263330bf1664ffb4726b9a54a1700
-Token faucet contract address: urFWwCPtgTU6JZB5ocB4QhVEncCP3c7Jh5ZzDnb6Szrj
-Deploying contract SubjectSharesBalance
-Deployer - group 0 - 1DrDyTr9RpRsQnDnXo2YRiPzPW4ooHX5LLoqXrqfMrpQH
-SubjectSharesBalance template contract id: 5e440808bfc3227fc8a8c538797ab739440b191dd95137f1a0e9a8ba3f628500
-SubjectSharesBalance template contract address: 212vbxinYT7xNavHS7ULN5xnZhk95GaLMRgyypC4LCHHR
-Deploying contract SubjectShares
-Deployer - group 0 - 1DrDyTr9RpRsQnDnXo2YRiPzPW4ooHX5LLoqXrqfMrpQH
-SubjectShares template contract id: 44ab0c921dd2a409125314fe109e4404640ce418036daef6f040009c7c276c00
-SubjectShares template contract address: yK17Vr9WT87uU3PPZMkRHkFG48KXQizE4jpgLRCiU6cw
-Deploying contract FriendTech
-Deployer - group 0 - 1DrDyTr9RpRsQnDnXo2YRiPzPW4ooHX5LLoqXrqfMrpQH
-FriendTech contract id: 419f6209e733c02b934d2748a369104690e1f7923e6566060e56102b601ed600
-FriendTech contract address: y77a8yXo1RHYejbSr5Pc2Y7M2JHUhCytKMVkQFz4mqxT
+Token faucet contract id: 8edd13ac5100025c3e67b028d55b4264cb5162660da947602d39ccb5130fce00
+Token faucet contract address: 24JdXXyJf35NMpECHz4XoMYqPaxG7LYAATaHfkN9jE2o9

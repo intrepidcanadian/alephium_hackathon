@@ -10,7 +10,7 @@ const deploySubjectSharesBalanceTemplate: DeployFunction<Settings> = async (
   const result = await deployer.deployContract(SubjectSharesBalance, {
     initialFields: {
       subject: randomContractAddress(),
-      subjectSharesContractId: randomContractId(),
+      collateralContractId: randomContractId(),
       balance: 0n,
     }
   })

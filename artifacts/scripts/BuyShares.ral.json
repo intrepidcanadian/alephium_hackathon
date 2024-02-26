@@ -1,13 +1,13 @@
 {
   "version": "v2.8.3",
   "name": "BuyShares",
-  "bytecodeTemplate": "01010300000009b4{2}a2{0}{1}0e0c{3}0105",
+  "bytecodeTemplate": "01010300000009b4{2}a2{0}{1}0e0c{3}011d",
   "fieldsSig": {
     "names": [
       "subject",
       "amount",
       "totalPayment",
-      "friendTech"
+      "borrowing"
     ],
     "types": [
       "Address",

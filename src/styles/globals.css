@@ -2,6 +2,41 @@
   box-sizing: border-box;
 }
 
+.button--updateinterest {
+  margin-top: 5rem;
+  padding: 0rem;
+  height: 5rem;
+  width: 4rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.wallet__button {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  margin: 1rem;
+  width: 95vw;
+  flex-direction: column;
+  border: 1px solid black;
+}
+
+.header__container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 1rem;
+  margin: 1rem;
+  border: 1px solid black;
+  background-color: blue;
+  color: white;
+
+}
+.header__container--walletstats {
+  display: flex;
+  flex-direction: column;
+}
+
 .columns {
   display: flex;
   grid-template-columns: 1fr 1fr;
@@ -399,7 +434,7 @@ form {
   max-width: var(--width-card-wide);
   min-width: var(--width-card);
   padding: 1.5rem;
-  margin: 2rem 0;
+  margin: 1rem 0;
   text-align: var(--justify-normal);
 }
 

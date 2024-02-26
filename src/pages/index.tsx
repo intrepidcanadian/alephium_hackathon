@@ -9,7 +9,6 @@ import { tokenFaucetConfig } from '@/services/utils'
 
 // components used for the dapp
 import { TokenDapp } from '@/components/TokenDapp'
-import { LendingDapp} from '@/components/LendingDapp'
 
 
 export default function Home() {
@@ -38,21 +37,20 @@ export default function Home() {
 
   return (
     <>
-      <div className={styles.container}>
-    
-          <AlephiumConnectButton />
+      <AlephiumConnectButton />
 
-        {!!accountdata && <div> 
-          <h1>Address of Wallet: {accountdata.address} </h1>  
-          <h1>Public Key of Wallet: {accountdata.publicKey} </h1> 
-          <h2>Current Status is: {connectionStatusdata} </h2> 
-          <h3>Network is: {accountdata.network} </h3>
+        {!!accountdata && 
+          <div style={{ borderTop: '2px solid #000', borderBottom: '2px solid #000', marginTop: '1rem' }}>
+            <h3>Wallet Information</h3>
+            <ul>
+            <li>Address of Wallet: {accountdata.address} </li>  
+            <li>Public Key of Wallet: {accountdata.publicKey} </li> 
+            <li>Current Status is: {connectionStatusdata} </li> 
+            <li>Network is: {accountdata.network} </li>
+            </ul>
           </div> }
-
-        <Head>
-          <title>Token Faucet</title>
-        </Head>
-
+      
+      <div className={styles.container}>
         {connectionStatusdata === 'connected' && (
           <TokenDapp config={tokenFaucetConfig} />
         )}

@@ -7,12 +7,10 @@ import { NetworkId } from "@alephium/web3";
 import {
   TokenFaucet,
   TokenFaucetInstance,
-  SubjectSharesBalance,
-  SubjectSharesBalanceInstance,
-  SubjectShares,
-  SubjectSharesInstance,
-  FriendTech,
-  FriendTechInstance,
+  TokenSharesBalance,
+  TokenSharesBalanceInstance,
+  TokenShares,
+  TokenSharesInstance,
 } from ".";
 import { default as testnetDeployments } from "../.deployments.testnet.json";
 import { default as devnetDeployments } from "../.deployments.devnet.json";
@@ -21,9 +19,8 @@ export type Deployments = {
   deployerAddress: string;
   contracts: {
     TokenFaucet: DeployContractExecutionResult<TokenFaucetInstance>;
-    SubjectSharesBalance?: DeployContractExecutionResult<SubjectSharesBalanceInstance>;
-    SubjectShares?: DeployContractExecutionResult<SubjectSharesInstance>;
-    FriendTech?: DeployContractExecutionResult<FriendTechInstance>;
+    TokenSharesBalance?: DeployContractExecutionResult<TokenSharesBalanceInstance>;
+    TokenShares?: DeployContractExecutionResult<TokenSharesInstance>;
   };
 };
 
@@ -35,31 +32,22 @@ function toDeployments(json: any): Deployments {
         json.contracts["TokenFaucet"].contractInstance.address
       ),
     },
-    SubjectSharesBalance:
-      json.contracts["SubjectSharesBalance"] === undefined
+    TokenSharesBalance:
+      json.contracts["TokenSharesBalance"] === undefined
         ? undefined
         : {
-            ...json.contracts["SubjectSharesBalance"],
-            contractInstance: SubjectSharesBalance.at(
-              json.contracts["SubjectSharesBalance"].contractInstance.address
+            ...json.contracts["TokenSharesBalance"],
+            contractInstance: TokenSharesBalance.at(
+              json.contracts["TokenSharesBalance"].contractInstance.address
             ),
           },
-    SubjectShares:
-      json.contracts["SubjectShares"] === undefined
+    TokenShares:
+      json.contracts["TokenShares"] === undefined
         ? undefined
         : {
-            ...json.contracts["SubjectShares"],
-            contractInstance: SubjectShares.at(
-              json.contracts["SubjectShares"].contractInstance.address
-            ),
-          },
-    FriendTech:
-      json.contracts["FriendTech"] === undefined
-        ? undefined
-        : {
-            ...json.contracts["FriendTech"],
-            contractInstance: FriendTech.at(
-              json.contracts["FriendTech"].contractInstance.address
+            ...json.contracts["TokenShares"],
+            contractInstance: TokenShares.at(
+              json.contracts["TokenShares"].contractInstance.address
             ),
           },
   };

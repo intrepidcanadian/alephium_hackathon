@@ -1,14 +1,14 @@
 {
   "version": "v2.8.3",
-  "name": "UpdateOwner",
-  "bytecodeTemplate": "01010300000005{0}0d0c{1}0100",
+  "name": "SetBorrowRate",
+  "bytecodeTemplate": "01010300000005{0}0d0c{1}010e",
   "fieldsSig": {
     "names": [
-      "newOwner",
-      "friendTech"
+      "feePercent",
+      "borrowing"
     ],
     "types": [
-      "Address",
+      "U256",
       "ByteVec"
     ],
     "isMutable": [

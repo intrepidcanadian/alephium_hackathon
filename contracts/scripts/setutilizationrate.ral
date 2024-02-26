@@ -1,0 +1,3 @@
+TxScript SetTargetUtilization(targetPercent: U256, borrowing: TokenFaucet) {
+    borrowing.setTargetUtilization(targetPercent)
+}

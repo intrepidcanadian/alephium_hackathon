@@ -1,0 +1,3 @@
+TxScript UpdateDefiOwner(newOwner: Address, borrowing: TokenFaucet ) {
+    borrowing.updateOwner(newOwner)
+}

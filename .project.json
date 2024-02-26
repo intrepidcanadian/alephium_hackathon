@@ -11,23 +11,16 @@
   "infos": {
     "BuyShares": {
       "sourceFile": "scripts/buy.ral",
-      "sourceCodeHash": "27f0b2f9441fe5cdf4419c6d386b7362c4e1db4f1f147e276bc72d822c378122",
+      "sourceCodeHash": "f36552b196a0b17cf60aed3144fd3cca6e2670ca8229e292fc85bdc39fe7dedf",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
     },
     "Deposit": {
       "sourceFile": "scripts/withdraw.ral",
-      "sourceCodeHash": "726eeadf2a06dad719da12a67db7435fe5d61cedca825f58ebc073f772ab3228",
+      "sourceCodeHash": "1ba3b2121eeb5015c8b2791cdcdec903f3c409d99f60cccbbb5828c20cd53e71",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
-      "warnings": []
-    },
-    "FriendTech": {
-      "sourceFile": "Friendtech.ral",
-      "sourceCodeHash": "9fe3897ec0366f1d429d9cfa3b34d5311b06525112f6ae2320b2f53545748a41",
-      "bytecodeDebugPatch": "",
-      "codeHashDebug": "048266521a0ba2d6202da7c6cdc1c5a3bea33de828923f7de087c54c7c909382",
       "warnings": []
     },
     "IFungibleToken": {
@@ -39,56 +32,70 @@
     },
     "SellShares": {
       "sourceFile": "scripts/sell.ral",
-      "sourceCodeHash": "cd36bf04619ab82c5bb560707bf40dd90f0681652633b0bab95d87eeb2331f65",
+      "sourceCodeHash": "22e6070ec9b9a4e12ab9f5706bc5ca3cac4cd4240bfbcf95d9e8af790f0ccc49",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
+      "warnings": []
+    },
+    "SetBorrowRate": {
+      "sourceFile": "scripts/setborrowrate.ral",
+      "sourceCodeHash": "a5f53cdedacf7fbdd85accf77f6a6a1bda9ebc61eb26b59858083586915ff930",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
     },
     "SetProtocolFeePercent": {
       "sourceFile": "scripts/setprotocolfee.ral",
-      "sourceCodeHash": "2b25d8a249afb11c7ed4727507522da5abfae34faeedc83e48e1891e248dc3ad",
+      "sourceCodeHash": "4dfba424f49812389cb0fc5a64af045b69aee42e73b8a4dc550f060abbd4b35b",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
     },
-    "SetSubjectFeePercent": {
-      "sourceFile": "scripts/setsubjectfee.ral",
-      "sourceCodeHash": "f2353331b00200347be700c9c6f56c2c9a38898603cea4c71e9f727b85f7e1d3",
+    "SetTargetUtilization": {
+      "sourceFile": "scripts/setutilizationrate.ral",
+      "sourceCodeHash": "01ed657400b6281ae345dff326d1fa11924bb5bc6ccfede6e20869d6284b8f7f",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
     },
-    "SubjectShares": {
-      "sourceFile": "Subjectshares.ral",
-      "sourceCodeHash": "835f998121a6f45369f19f94117ab658c5f275e9b4dc7495b989d61259501737",
+    "TokenFaucet": {
+      "sourceFile": "TokenFaucet.ral",
+      "sourceCodeHash": "a16265e3a505e9a5ae36a22adb34cd4025aed071e49c5bb3e6c3875b93a8c64c",
+      "bytecodeDebugPatch": "=82-5=1+6=2-2=1-3+9=2-1+5=3-6+69=3-1+3=2-1+e=2-2+2=3+30f=1+32=2+3f9=1+48=1-1+449a=845+ea0047e02175468652063757272656e742062616=1+616e63652069732000=111+c=1+0047e02175468652063757272656e742062616c616e63652069732000=1282",
+      "codeHashDebug": "78fa30f0f5c9058a6bac9f226020bacc1ebbe5f519d992f4219e706a907f420b",
+      "warnings": []
+    },
+    "TokenShares": {
+      "sourceFile": "TokenShares.ral",
+      "sourceCodeHash": "34ad659181ae5d1673411a34cc443aa3008ad694684b56b6e924df296a95d416",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "390262034f6249e2ded2c2615ffe5cd4990183176bc6c40fe6728a6705c79465",
       "warnings": []
     },
-    "SubjectSharesBalance": {
-      "sourceFile": "Subjectsharesbalances.ral",
-      "sourceCodeHash": "30be7ccfae12a180b958c7094606fb3fa30c3c91a12d78e635303059c8254101",
+    "TokenSharesBalance": {
+      "sourceFile": "TokenSharesBalances.ral",
+      "sourceCodeHash": "d1d65a44cd0dfa9c3d34922978b456409fa5ad3afa0da0f54775ffa8ccec3f5c",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "3db400267b6d4ab5737e7daf05a152f31ed33b890a8579e5256531e1f5c7496a",
       "warnings": []
     },
-    "TokenFaucet": {
-      "sourceFile": "token.ral",
-      "sourceCodeHash": "7e8ec5098ba212a36bcd78090ad7bdfe4aea7402bffe470544bd126f8e70161d",
-      "bytecodeDebugPatch": "=20-4+6=1+4=1+aa=101+3a0007e02=1+75468652063757272656e742062616c616e63652069732000=57+8a0007e02175468652063757272=1+56e742062616c616e63652069732000=64",
-      "codeHashDebug": "4c4ad82adf4b20f1dd9cb7e62519aa918b69e49200848e2b703bf76e45117dc8",
+    "Update": {
+      "sourceFile": "scripts/withdraw.ral",
+      "sourceCodeHash": "1ba3b2121eeb5015c8b2791cdcdec903f3c409d99f60cccbbb5828c20cd53e71",
+      "bytecodeDebugPatch": "",
+      "codeHashDebug": "",
       "warnings": []
     },
-    "UpdateOwner": {
-      "sourceFile": "scripts/updateowner.ral",
-      "sourceCodeHash": "10465145dc3b6f71ce3e92a60334735885da0d777e629a6fa60424791bbb895a",
+    "UpdateDefiOwner": {
+      "sourceFile": "scripts/updatedefiowner.ral",
+      "sourceCodeHash": "08e26140a540a6aed41a15631f8911d6798b0b59f9c14ba4bfc754a86c4b2c77",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []
     },
     "Withdraw": {
       "sourceFile": "scripts/withdraw.ral",
-      "sourceCodeHash": "726eeadf2a06dad719da12a67db7435fe5d61cedca825f58ebc073f772ab3228",
+      "sourceCodeHash": "1ba3b2121eeb5015c8b2791cdcdec903f3c409d99f60cccbbb5828c20cd53e71",
       "bytecodeDebugPatch": "",
       "codeHashDebug": "",
       "warnings": []

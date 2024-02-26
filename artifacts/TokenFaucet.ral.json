@@ -1,18 +1,44 @@
 {
   "version": "v2.8.3",
   "name": "TokenFaucet",
-  "bytecode": "060709121b4024402d404a4070010000000102ce0002010000000102ce0102010000000102ce0202010000000102ce0302010000000102a0000201020101001116000e320c7bb4b11600aba00016002ba10005b416005f01010102001616000e320d7bb4170116011600a91601b11600aba00016002aa10006b416005f",
-  "codeHash": "ef744dd9f72d558e63d3051c667c445f5dce582e0feef7e7202b30da071600d3",
+  "bytecode": "13402009121b4024402d403940464052405e406740704079408f40bc40cc40dc4142414a419841a141d9420f421f422f429942a842ba42d542f243bf444c4460010000000102ce0002010000000102ce0102010000000102ce0202010000000102ce0402010000000102a00402010000010104b11700160002010000010104ce031700160002010000010104b11700160002010000010104b21700160002010000000102a00602010000000102a00702010000000102a0030201000101000bb4a000450e7b1600a10008a00016005f010000030115000b170013141701136710170216001601314c03136710024a06160116022c16002da105a00502010001010007b4a000450e7b1600a107010001010007b4a000450e7b1600a10601000005014036000d17000009170113671017021341f417031380007530170416001601314c0da007160016022c16012d16032c16022d2a024a1b160016012f4c05a00716032a024a12a00716032a160016012b16022c13671016012b2d16042c16022d2a02010000000102560201000006014026001117000c17011341f4170213c10757b12c001703130a1312831704a0020c304c041600a0022b1701a00316022c16012c16042c16032d1705a00116052aa1011600a102a00102010000000102a0020201010103001c160013c40de0b6b3a76400002c1701a0031600340c7bb4b11600acb41601a8a00316002ba103a00416002aa10405b416005f01010102001a160013c40de0b6b3a76400002c1701b41601a9b2b4b11600aaa00316002aa103a00416002ba1040012a10106b416005f010001010007b4a000450e7b1600a109010001010007b4a000450e7b1600a10a0100020501404016000c2f4c020c4a0f16000d2b16002c0e16000d2b2c0d2a2c13062d170216000c2f16010d2f1a4c020c4a15160016012a0d2b160016012a2c0e160016012a0d2b2c0d2a2c13062d1703160316022b1704160413c40de0b6b3a76400002c137e802d020100020201051600001b16010018020100020201071600001b16012b160100180201000102010e160047cb17011601c54c050c0d160101004a010c0201000203010f160047cb17021602c54c0616010d0d160201014a010c020101020c00406d1600001b1702b4170316020c3316031600451b0f7b16021601001817041604a0092c1367102d17051604a00a2c1367102d1706160047cb17071607c54c1b16030d0d1607010117081606170916080c2f4c04160913c40de0b6b3a76400002a170916031609a21603160116060f0c160701024a17ce061603b113036416011601130264170b170a1603160613c40de0b6b3a76400002aa2160047ce05160a160bc118a00816052aa1081603b2160416052aa70716031600031601160416051606160216012a7601020209004052b41702160047cb17031603c5117b160317040c0d160401001705160516013313067b160516012b1601001817061606a0092c1367102d17071606a00a2c1367102d170816020d0d16040101160134107ba00816072aa1081602160616082b16072ba8b21608a21602160116080f0c160401030716021600041601160616071608160516012b7601000101000ab4a000450e7b0ca1081600a008a8",
+  "codeHash": "824f9ce966e289e291b674664e621a52867d3606c342675b36f831ed397320e1",
   "fieldsSig": {
     "names": [
       "symbol",
       "name",
       "decimals",
-      "supply",
-      "balance",
+      "contractId",
+      "owner",
+      "totalsupply",
+      "accumulatedinterest",
+      "lastblocktimestamp",
+      "issuedtokens",
+      "balanceofTokens",
+      "utilization",
+      "targetutilization",
+      "baseborrowrate",
+      "tokenSharesTemplateId",
+      "tokenSharesBalanceTemplateId",
+      "totalProtocolFee",
+      "protocolFeePercent",
+      "subjectFeePercent",
       "__stdInterfaceId"
     ],
     "types": [
+      "ByteVec",
+      "ByteVec",
+      "U256",
+      "ByteVec",
+      "Address",
+      "U256",
+      "U256",
+      "U256",
+      "U256",
+      "U256",
+      "U256",
+      "U256",
+      "U256",
       "ByteVec",
       "ByteVec",
       "U256",
@@ -25,6 +51,19 @@
       false,
       false,
       false,
+      true,
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      false,
+      false,
+      true,
+      true,
       true,
       false
     ]
@@ -50,6 +89,40 @@
       "fieldTypes": [
         "Address",
         "U256"
+      ]
+    },
+    {
+      "name": "Trade",
+      "fieldNames": [
+        "trader",
+        "tokencurrency",
+        "isBuy",
+        "shareAmount",
+        "alphAmount",
+        "protocolAlphAmount",
+        "subjectAlphAmount",
+        "supply"
+      ],
+      "fieldTypes": [
+        "Address",
+        "Address",
+        "Bool",
+        "U256",
+        "U256",
+        "U256",
+        "U256",
+        "U256"
+      ]
+    },
+    {
+      "name": "OwnerUpdated",
+      "fieldNames": [
+        "previous",
+        "new"
+      ],
+      "fieldTypes": [
+        "Address",
+        "Address"
       ]
     }
   ],
@@ -103,7 +176,199 @@
       ]
     },
     {
-      "name": "balance",
+      "name": "getBalanceofTokens",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getSelfContractId",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getDeployedContractID",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getSelfTokenId",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "ByteVec"
+      ]
+    },
+    {
+      "name": "getSelfAddress",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "Address"
+      ]
+    },
+    {
+      "name": "getTargetUtilization",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getBaseBorrowRate",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getIssuedTokens",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "updateOwner",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "newOwner"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "getUtilization",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "setBaseBorrowRate",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "feePercent"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "setTargetUtilization",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "targetPercent"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "getInterest",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getBlockTimeStamp",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getAccruedInterest",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [],
+      "paramTypes": [],
+      "paramIsMutable": [],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getLastBlockTimeStamp",
       "usePreapprovedAssets": false,
       "useAssetsInContract": false,
       "isPublic": true,
@@ -116,7 +381,7 @@
     },
     {
       "name": "withdraw",
-      "usePreapprovedAssets": false,
+      "usePreapprovedAssets": true,
       "useAssetsInContract": true,
       "isPublic": true,
       "paramNames": [
@@ -145,6 +410,194 @@
         false
       ],
       "returnTypes": []
+    },
+    {
+      "name": "setProtocolFeePercent",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "feePercent"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "setSubjectFeePercent",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "feePercent"
+      ],
+      "paramTypes": [
+        "U256"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "getPrice",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "supply",
+        "amount"
+      ],
+      "paramTypes": [
+        "U256",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getBuyPrice",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "tokenShares",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getSellPrice",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "tokenShares",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getSupply",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "tokenShares"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "getBalance",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "tokenShares",
+        "holder"
+      ],
+      "paramTypes": [
+        "Address",
+        "Address"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": [
+        "U256"
+      ]
+    },
+    {
+      "name": "buyShares",
+      "usePreapprovedAssets": true,
+      "useAssetsInContract": true,
+      "isPublic": true,
+      "paramNames": [
+        "tokenShares",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "sellShares",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": true,
+      "isPublic": true,
+      "paramNames": [
+        "tokenShares",
+        "amount"
+      ],
+      "paramTypes": [
+        "Address",
+        "U256"
+      ],
+      "paramIsMutable": [
+        false,
+        false
+      ],
+      "returnTypes": []
+    },
+    {
+      "name": "withdrawProtocolFee",
+      "usePreapprovedAssets": false,
+      "useAssetsInContract": false,
+      "isPublic": true,
+      "paramNames": [
+        "to"
+      ],
+      "paramTypes": [
+        "Address"
+      ],
+      "paramIsMutable": [
+        false
+      ],
+      "returnTypes": []
     }
   ],
   "constants": [],
@@ -160,10 +613,38 @@
           }
         },
         {
-          "name": "InvalidDepositamount",
+          "name": "OwnerAllowedOnly",
           "value": {
             "type": "U256",
-            "value": "1"
+            "value": "2"
+          }
+        },
+        {
+          "name": "TokenAllowedFirstShareOnly",
+          "value": {
+            "type": "U256",
+            "value": "3"
+          }
+        },
+        {
+          "name": "InsufficientShares",
+          "value": {
+            "type": "U256",
+            "value": "4"
+          }
+        },
+        {
+          "name": "NoShareForTheSubject",
+          "value": {
+            "type": "U256",
+            "value": "5"
+          }
+        },
+        {
+          "name": "CanNotSellLastShare",
+          "value": {
+            "type": "U256",
+            "value": "6"
           }
         }
       ]

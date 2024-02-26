@@ -8,5 +8,6 @@ export const withdrawToken = async (signerProvider: SignerProvider, amount: stri
       amount: BigInt(amount)
     },
     attoAlphAmount: DUST_AMOUNT,
+    tokens: [{ id: tokenId, amount: BigInt(amount)}]
   })
 }

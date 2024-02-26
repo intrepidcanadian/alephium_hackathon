@@ -1,11 +1,11 @@
 {
   "version": "v2.8.3",
-  "name": "SetSubjectFeePercent",
-  "bytecodeTemplate": "01010300000005{0}0d0c{1}0101",
+  "name": "SetTargetUtilization",
+  "bytecodeTemplate": "01010300000005{0}0d0c{1}010f",
   "fieldsSig": {
     "names": [
-      "feePercent",
-      "friendTech"
+      "targetPercent",
+      "borrowing"
     ],
     "types": [
       "U256",

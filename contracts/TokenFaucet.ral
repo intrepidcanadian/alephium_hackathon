@@ -1,0 +1,395 @@
+import "std/fungible_token_interface"
+
+Contract TokenFaucet(
+    symbol: ByteVec,
+    name: ByteVec,
+    decimals: U256,
+    contractId: ByteVec,
+    mut owner: Address,
+    // that is the maximum number of tokens originally minted. New tokens added to supply represent more liquidity.
+    totalsupply: U256,
+
+    // this is to calculate the accumulated interest from depositing tokens
+    mut accumulatedinterest: U256,
+    mut lastblocktimestamp: U256,
+
+    // keep track of the remaining tokens in the faucet
+    mut issuedtokens: U256,
+
+    // keep track of the tokens not in the faucet
+    mut balanceofTokens: U256,
+    mut utilization: U256,
+    mut targetutilization: U256,
+    mut baseborrowrate: U256,
+    tokenSharesTemplateId: ByteVec,
+    tokenSharesBalanceTemplateId: ByteVec,
+    // cumulative protocol fee to be paid
+    mut totalProtocolFee: U256,
+    mut protocolFeePercent: U256,  
+    mut subjectFeePercent: U256     
+) implements IFungibleToken {
+
+    // Events allow for logging of activities on the blockchain.
+    // Alephium clients can listen to events in order to react to contract state changes.
+    event Withdraw(to: Address, amount: U256)
+    event Deposit(from: Address, amount: U256)
+
+    event Trade(
+        trader: Address,
+        tokencurrency: Address,
+        isBuy: Bool,
+        shareAmount: U256,
+        alphAmount: U256,
+        protocolAlphAmount: U256,
+        subjectAlphAmount: U256,
+        supply: U256
+    )
+
+    event OwnerUpdated(
+        previous: Address,
+        new: Address
+    )
+
+    enum ErrorCodes {
+        // To prevent withdrawing more than what is supplied
+        InvalidWithdrawAmount = 0
+    //     InvalidDepositamount = 1
+        OwnerAllowedOnly = 2
+        TokenAllowedFirstShareOnly = 3
+        InsufficientShares = 4
+        NoShareForTheSubject = 5
+        CanNotSellLastShare = 6
+    }
+
+    // A public function that returns the initial supply of the contract's token.
+    // Note that the field must be initialized as the amount of the issued token.
+    pub fn getTotalSupply() -> U256 {
+        return totalsupply
+    }
+
+    // A public function that returns the symbol of the token.
+    pub fn getSymbol() -> ByteVec {
+        return symbol
+    }
+
+    // A public function that returns the name of the token.
+    pub fn getName() -> ByteVec {
+        return name
+    }
+
+    // A public function that returns the decimals of the token.
+    pub fn getDecimals() -> U256 {
+        return decimals
+    }
+
+    // A public function that returns the current balance of the contract.
+    pub fn getBalanceofTokens() -> U256 {
+        return balanceofTokens
+    }
+
+    pub fn getSelfContractId() -> ByteVec {
+        let contractIDformula = selfContractId!()
+        return contractIDformula
+    }
+
+    pub fn getDeployedContractID() -> ByteVec {
+        let id = contractId
+        return id
+    }
+
+    pub fn getSelfTokenId() -> ByteVec {
+        let tokenIDformula = selfTokenId!()
+        return tokenIDformula
+    }
+
+    pub fn getSelfAddress() -> Address {
+        let selfAddressSDK = selfAddress!()
+        return selfAddressSDK
+    }
+
+    pub fn getTargetUtilization() -> U256 {
+        return targetutilization
+    }
+
+    pub fn getBaseBorrowRate() -> U256 {
+        return baseborrowrate
+    }
+
+    pub fn getIssuedTokens() -> U256 {
+        return issuedtokens
+    }
+
+    // This updates the owner
+    @using(updateFields = true)
+    pub fn updateOwner(newOwner: Address) -> () {
+        checkCaller!(callerAddress!() == owner, ErrorCodes.OwnerAllowedOnly)
+        owner = newOwner
+        emit OwnerUpdated(owner, newOwner)
+    }
+
+    // This calculates the utilization
+    @using(updateFields = true, checkExternalCaller = false)
+    pub fn getUtilization() -> U256 {
+        let currentIssuedTokens = getIssuedTokens()
+        // let borrowing demand be 50 alphtokens. This needs to be fixed later on to be dynamic
+        let borrowingdemand = 20
+        let scalingfactor = 10000
+        if (currentIssuedTokens < borrowingdemand) {
+            return 10000
+        } else {
+            utilization = (borrowingdemand * scalingfactor / currentIssuedTokens)
+        }
+
+        return utilization
+    }
+
+     // This sets the base borrow rate. Deployment of 5n to start
+    @using(updateFields = true)
+    pub fn setBaseBorrowRate(feePercent: U256) -> () {
+        checkCaller!(callerAddress!() == owner, ErrorCodes.OwnerAllowedOnly)
+        baseborrowrate = feePercent
+    }
+    
+    // This sets the base borrow rate. Deployment of 5n to start
+    @using(updateFields = true)
+    pub fn setTargetUtilization(targetPercent: U256) -> () {
+        checkCaller!(callerAddress!() == owner, ErrorCodes.OwnerAllowedOnly)
+        targetutilization = targetPercent
+    }
+    
+    @using(checkExternalCaller = false)
+    pub fn getInterest() -> U256 {
+        let currentUtilization = getUtilization()
+        let threshold = getTargetUtilization()
+        let scalingfactor = 10000
+        // slope 1 represents 5% similar to AAVE (straight line slope below target utilization)
+        let slope1 = 500
+        // slope 2 represents 300% similar to AAVE (slope2 used after target utilization is reached)
+        let slope2 = 30000
+
+        if (currentUtilization < threshold) {
+            // return (baseborrowrate * (currentUtilization * scalingfactor / threshold)  * slope1)
+            return baseborrowrate + (((currentUtilization * scalingfactor / threshold ) * slope1) / scalingfactor)
+            // return 1 
+        } else if (currentUtilization == threshold) {
+            return (baseborrowrate + slope1)
+        } else {
+            return (baseborrowrate + slope1 + ((((currentUtilization - threshold) * scalingfactor) / (10000 - threshold)) * slope2 / scalingfactor))
+            }
+        }
+
+    pub fn getBlockTimeStamp() -> U256 {
+        return blockTimeStamp!()
+    }
+
+    @using(updateFields = true, checkExternalCaller = false)
+    pub fn getAccruedInterest() -> U256 {
+        let currentblocktimestamp = getBlockTimeStamp()
+        let mut timeelapsed = 0
+        let interestrate = 500
+        let millisecondsinyear = 31536000000
+        let scalingfactor = 10 ** 18
+
+        if (lastblocktimestamp != 0) {
+            timeelapsed = currentblocktimestamp - lastblocktimestamp
+        }
+
+        let interest = (issuedtokens * interestrate * timeelapsed * scalingfactor) / (millisecondsinyear)
+    
+        accumulatedinterest = accumulatedinterest + interest
+
+        lastblocktimestamp = currentblocktimestamp
+
+        return accumulatedinterest
+    }
+
+    pub fn getLastBlockTimeStamp() -> U256 {
+        return lastblocktimestamp
+    }
+
+    
+    // A public function that transfers tokens to anyone who calls it.
+    // The function is annotated with `updateFields = true` as it changes the contract fields.
+    // The function is annotated as using contract assets as it does.
+    // The function is annotated with `checkExternalCaller = false` as there is no need to check the external caller.
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn withdraw(amount: U256) -> () {
+        // Debug events can be helpful for error analysis
+        emit Debug(`The current balance is ${balanceofTokens}`)
+
+        // Make sure the amount is valid 
+        // assert!(amount <= 100, ErrorCodes.InvalidWithdrawAmount)
+
+        let returnfunds = amount * 1 alph
+        // Functions postfixed with `!` are built-in functions.
+        assert!(issuedtokens >= amount, ErrorCodes.InvalidWithdrawAmount)
+        transferTokenToSelf!(callerAddress!(), selfTokenId!(), amount)
+        transferTokenFromSelf!(callerAddress!(), ALPH, returnfunds)
+
+        // Ralph does not allow underflow.
+        // balanceofTokens = balanceofTokens - amount
+        
+        issuedtokens = issuedtokens - amount
+        // increases the amount of tokens in faucet as the tokens are returned
+        balanceofTokens = balanceofTokens + amount
+
+        // Emit the event defined earlier.
+        emit Withdraw(callerAddress!(), amount)
+    }
+
+    @using(preapprovedAssets = true, assetsInContract = true, updateFields = true, checkExternalCaller = false)
+    pub fn deposit(amount: U256) -> () {
+        emit Debug(`The current balance is ${balanceofTokens}`)
+
+        // assert!(amount <= 100, ErrorCodes.InvalidDepositamount)
+        // transferToken!(selfAddress!(), caller, ALPH, amount) // sending token payment to contract
+        // transferToken!(caller, selfAddress!(), selfTokenId!(), amount) // deposit token
+
+        // transferTokenToSelf!(callerAddress!(), selfTokenId!(), amount)
+        let supplyfunds = amount * 1 alph
+
+        transferTokenToSelf!(callerAddress!(), ALPH, supplyfunds)
+        transferToken!(selfAddress!(), callerAddress!(), selfTokenId!(), amount)
+
+        issuedtokens = issuedtokens + amount
+        // removes tokens in faucet to represent the tokens given in exchange for alph
+        balanceofTokens = balanceofTokens - amount
+
+        accumulatedinterest = getAccruedInterest()
+
+        emit Deposit(callerAddress!(), amount)
+    }
+
+    // friendtech specific functions to be changed
+
+    @using(updateFields = true)
+    pub fn setProtocolFeePercent(feePercent: U256) -> () {
+        checkCaller!(callerAddress!() == owner, ErrorCodes.OwnerAllowedOnly)
+        protocolFeePercent = feePercent
+    }
+
+    @using(updateFields = true)
+    pub fn setSubjectFeePercent(feePercent: U256) -> () {
+        checkCaller!(callerAddress!() == owner, ErrorCodes.OwnerAllowedOnly)
+        subjectFeePercent = feePercent
+    }
+
+    pub fn getPrice(supply: U256, amount: U256) -> U256 {
+        let sum1 = if (supply == 0) 0 else (supply - 1 )* (supply) * (2 * (supply - 1) + 1) / 6
+        let sum2 = if (supply == 0 && amount == 1) 0 else (supply + amount - 1) * (supply + amount) * (2 * (supply + amount - 1) + 1) / 6
+        let summation = sum2 - sum1
+        return summation * 1 alph / 16000
+    }
+
+    // to get the buy price, it finds the supply of the influencer and the amount of shares to be bought
+    // changed to get the buy price based on the supply of tokenshares created
+    pub fn getBuyPrice(tokenShares: Address, amount: U256) -> U256 {
+        return getPrice(getSupply(tokenShares), amount)
+    }
+
+    // to get the sell price, it finds the supply of the influencer and subtracts amount of shares to be sold
+    // changed to get the sell price based on the supply of tokenshares created
+    pub fn getSellPrice(tokenShares: Address, amount: U256) -> U256 {
+        return getPrice(getSupply(tokenShares) - amount, amount)
+    }
+
+    // this gets the supply and the balance from subcontracts. the first subcontract is based on the tokenShares address
+    // the tokenshare represents the influencer
+
+    pub fn getSupply(tokenShares: Address) -> U256 {
+        let tokenSharesContractId = subContractId!(toByteVec!(tokenShares))
+        return 
+            if (contractExists!(tokenSharesContractId)) 
+                TokenShares(tokenSharesContractId).getSupply() 
+                else 0
+    }
+
+    pub fn getBalance(tokenShares: Address, holder: Address) -> U256 {
+        let tokenSharesContractId = subContractId!(toByteVec!(tokenShares))
+        return 
+            if (contractExists!(tokenSharesContractId)) 
+                TokenShares(tokenSharesContractId).getBalance(holder) 
+                else 0
+    }
+
+    @using(checkExternalCaller = false, assetsInContract = true, preapprovedAssets = true, updateFields = true)
+    pub fn buyShares(tokenShares: Address, amount: U256) -> () {
+        let supply = getSupply(tokenShares)
+        let buyer = callerAddress!()
+        assert!(supply > 0 || buyer == tokenShares, ErrorCodes.TokenAllowedFirstShareOnly)
+        let price = getPrice(supply, amount)
+        let protocolFee = price * protocolFeePercent / 10000
+        let subjectFee = price * subjectFeePercent / 10000
+
+        let tokenSharesContractId = subContractId!(toByteVec!(tokenShares))
+        if (contractExists!(tokenSharesContractId)) {
+            let balance = TokenShares(tokenSharesContractId).getBalance(buyer)
+            let mut approvedAssets = subjectFee
+            if (balance == 0) {
+              
+                approvedAssets = approvedAssets + 1 alph
+            }
+            TokenShares(tokenSharesContractId).buy{buyer -> ALPH: approvedAssets}(buyer, amount, subjectFee)
+        } else {
+            let (encodedImmutableFields, encodedMutableFields) = TokenShares.encodeFields!(
+                tokenSharesBalanceTemplateId,
+                buyer,
+                selfContractId!(),
+                amount,
+                amount
+            )
+            copyCreateSubContract!{buyer -> ALPH: subjectFee + 1 alph}(
+                toByteVec!(tokenShares),
+                tokenSharesTemplateId,
+                encodedImmutableFields,
+                encodedMutableFields
+            )
+        }
+
+        totalProtocolFee = totalProtocolFee + protocolFee
+        transferToken!(buyer, selfAddress!(), ALPH, price + protocolFee)
+
+        emit Trade(buyer, tokenShares, true, amount, price, protocolFee, subjectFee, supply + amount)
+    }
+
+    @using(checkExternalCaller = false, assetsInContract = true, updateFields = true)
+    pub fn sellShares(tokenShares: Address, amount: U256) -> () {
+
+        // we are going to check if there is an influencer contract
+        let seller = callerAddress!()
+        let tokenSharesContractId = subContractId!(toByteVec!(tokenShares))
+        assert!(contractExists!(tokenSharesContractId), ErrorCodes.NoShareForTheSubject)
+
+        // we are going to check if the seller has the amount of shares they are trying to sell of the token
+        // we are going to check the TokenShares contract to restrict being able to sell off the last share
+        // ***THIS IS THE CONTRACT WE REFERENCE TO BASED ON THE CONTRACT ID OF THE TOKENSHARES
+        let sharesofToken = TokenShares(tokenSharesContractId)
+        let supply = sharesofToken.getSupply()
+        assert!(supply > amount, ErrorCodes.CanNotSellLastShare)
+
+        let price = getPrice(supply - amount, amount)
+        let protocolFee = price * protocolFeePercent / 10000
+        let subjectFee = price * subjectFeePercent / 10000
+
+        // we are going to check if the seller has the amount it is looking to sell
+        assert!(sharesofToken.getBalance(seller) >= amount, ErrorCodes.InsufficientShares)
+
+        totalProtocolFee = totalProtocolFee + protocolFee
+        transferTokenFromSelf!(seller, ALPH, price - subjectFee - protocolFee)
+
+        sharesofToken.sell{selfAddress!() -> ALPH : subjectFee}(seller, amount, subjectFee)
+
+        emit Trade(seller, tokenShares, false, amount, price, protocolFee, subjectFee, supply - amount)
+        // in the emission of event, 
+        // it reports who the trader is, the subject, that it is selling, amount selling, the price, protocol being paid, creator being paid, and the supply after the trade
+    }
+
+    @using(updateFields = true)
+    pub fn withdrawProtocolFee(to: Address) -> () {
+       checkCaller!(callerAddress!() == owner, ErrorCodes.OwnerAllowedOnly)
+       totalProtocolFee = 0
+       transferTokenFromSelf!(to, ALPH, totalProtocolFee)
+    }
+
+
+}

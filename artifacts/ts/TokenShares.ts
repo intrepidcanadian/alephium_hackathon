@@ -24,15 +24,15 @@ import {
   ContractInstance,
   getContractEventsCurrentCount,
 } from "@alephium/web3";
-import { default as SubjectSharesContractJson } from "../SubjectShares.ral.json";
+import { default as TokenSharesContractJson } from "../TokenShares.ral.json";
 import { getContractByCodeHash } from "./contracts";
 
 // Custom types for the contract
-export namespace SubjectSharesTypes {
+export namespace TokenSharesTypes {
   export type Fields = {
-    subjectSharesBalanceTemplateId: HexString;
-    subject: Address;
-    friendContractId: HexString;
+    tokenSharesBalanceTemplateId: HexString;
+    tokencollateral: Address;
+    collateralContractId: HexString;
     subjectOwnBalance: bigint;
     supply: bigint;
   };
@@ -64,41 +64,41 @@ export namespace SubjectSharesTypes {
 }
 
 class Factory extends ContractFactory<
-  SubjectSharesInstance,
-  SubjectSharesTypes.Fields
+  TokenSharesInstance,
+  TokenSharesTypes.Fields
 > {
   getInitialFieldsWithDefaultValues() {
-    return this.contract.getInitialFieldsWithDefaultValues() as SubjectSharesTypes.Fields;
+    return this.contract.getInitialFieldsWithDefaultValues() as TokenSharesTypes.Fields;
   }
 
   consts = {
     ErrorCodes: {
-      FriendContractAllowedOnly: BigInt(0),
+      CollateralContractAllowedOnly: BigInt(0),
       NotEnoughBalance: BigInt(1),
     },
   };
 
-  at(address: string): SubjectSharesInstance {
-    return new SubjectSharesInstance(address);
+  at(address: string): TokenSharesInstance {
+    return new TokenSharesInstance(address);
   }
 
   tests = {
     getSupply: async (
       params: Omit<
-        TestContractParams<SubjectSharesTypes.Fields, never>,
+        TestContractParams<TokenSharesTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResult<bigint>> => {
       return testMethod(this, "getSupply", params);
     },
     getBalance: async (
-      params: TestContractParams<SubjectSharesTypes.Fields, { holder: Address }>
+      params: TestContractParams<TokenSharesTypes.Fields, { holder: Address }>
     ): Promise<TestContractResult<bigint>> => {
       return testMethod(this, "getBalance", params);
     },
     buy: async (
       params: TestContractParams<
-        SubjectSharesTypes.Fields,
+        TokenSharesTypes.Fields,
         { holder: Address; amount: bigint; subjectFee: bigint }
       >
     ): Promise<TestContractResult<null>> => {
@@ -106,7 +106,7 @@ class Factory extends ContractFactory<
     },
     sell: async (
       params: TestContractParams<
-        SubjectSharesTypes.Fields,
+        TokenSharesTypes.Fields,
         { seller: Address; amount: bigint; subjectFee: bigint }
       >
     ): Promise<TestContractResult<null>> => {
@@ -116,30 +116,30 @@ class Factory extends ContractFactory<
 }
 
 // Use this object to test and deploy the contract
-export const SubjectShares = new Factory(
+export const TokenShares = new Factory(
   Contract.fromJson(
-    SubjectSharesContractJson,
+    TokenSharesContractJson,
     "",
     "390262034f6249e2ded2c2615ffe5cd4990183176bc6c40fe6728a6705c79465"
   )
 );
 
 // Use this class to interact with the blockchain
-export class SubjectSharesInstance extends ContractInstance {
+export class TokenSharesInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<SubjectSharesTypes.State> {
-    return fetchContractState(SubjectShares, this);
+  async fetchState(): Promise<TokenSharesTypes.State> {
+    return fetchContractState(TokenShares, this);
   }
 
   methods = {
     getSupply: async (
-      params?: SubjectSharesTypes.CallMethodParams<"getSupply">
-    ): Promise<SubjectSharesTypes.CallMethodResult<"getSupply">> => {
+      params?: TokenSharesTypes.CallMethodParams<"getSupply">
+    ): Promise<TokenSharesTypes.CallMethodResult<"getSupply">> => {
       return callMethod(
-        SubjectShares,
+        TokenShares,
         this,
         "getSupply",
         params === undefined ? {} : params,
@@ -147,10 +147,10 @@ export class SubjectSharesInstance extends ContractInstance {
       );
     },
     getBalance: async (
-      params: SubjectSharesTypes.CallMethodParams<"getBalance">
-    ): Promise<SubjectSharesTypes.CallMethodResult<"getBalance">> => {
+      params: TokenSharesTypes.CallMethodParams<"getBalance">
+    ): Promise<TokenSharesTypes.CallMethodResult<"getBalance">> => {
       return callMethod(
-        SubjectShares,
+        TokenShares,
         this,
         "getBalance",
         params,
@@ -159,14 +159,14 @@ export class SubjectSharesInstance extends ContractInstance {
     },
   };
 
-  async multicall<Calls extends SubjectSharesTypes.MultiCallParams>(
+  async multicall<Calls extends TokenSharesTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<SubjectSharesTypes.MultiCallResults<Calls>> {
+  ): Promise<TokenSharesTypes.MultiCallResults<Calls>> {
     return (await multicallMethods(
-      SubjectShares,
+      TokenShares,
       this,
       calls,
       getContractByCodeHash
-    )) as SubjectSharesTypes.MultiCallResults<Calls>;
+    )) as TokenSharesTypes.MultiCallResults<Calls>;
   }
 }

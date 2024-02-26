@@ -1,0 +1,33 @@
+Contract TokenSharesBalance(
+    tokencollateral: Address,
+    tokensSharesContractId: ByteVec,
+    mut balance: U256
+) {
+    enum ErrorCodes {
+        TokenSharesContractAllowedOnly = 0
+        NotEnoughBalance = 1
+    }
+
+    pub fn getBalance() -> U256 {
+        return balance
+    }
+
+   @using(updateFields = true)
+    pub fn addBalance(amount: U256) -> () {
+        checkCaller!(callerContractId!() == tokensSharesContractId, ErrorCodes.TokenSharesContractAllowedOnly)
+        balance = balance + amount
+    }
+
+   @using(updateFields = true, assetsInContract = true)
+    pub fn reduceBalance(amount: U256) -> () {
+        checkCaller!(callerContractId!() == tokensSharesContractId, ErrorCodes.TokenSharesContractAllowedOnly)
+        assert!(balance >= amount, ErrorCodes.NotEnoughBalance)
+
+        balance = balance - amount
+
+        if (balance == 0) {
+            // First share of a tokencollateral is created by the TokenShares contract
+            destroySelf!(tokencollateral)
+        }
+    }
+}

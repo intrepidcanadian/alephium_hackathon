@@ -1,7 +1,7 @@
 {
   "version": "v2.8.3",
   "name": "Withdraw",
-  "bytecodeTemplate": "01010300000005{1}0d0c{0}0105",
+  "bytecodeTemplate": "0101030000000cb47a{0}{1}a3{1}a2{1}0d0c{0}0114",
   "fieldsSig": {
     "names": [
       "token",

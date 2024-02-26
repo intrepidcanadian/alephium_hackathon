@@ -24,14 +24,14 @@ import {
   ContractInstance,
   getContractEventsCurrentCount,
 } from "@alephium/web3";
-import { default as SubjectSharesBalanceContractJson } from "../SubjectSharesBalance.ral.json";
+import { default as TokenSharesBalanceContractJson } from "../TokenSharesBalance.ral.json";
 import { getContractByCodeHash } from "./contracts";
 
 // Custom types for the contract
-export namespace SubjectSharesBalanceTypes {
+export namespace TokenSharesBalanceTypes {
   export type Fields = {
-    subject: Address;
-    subjectSharesContractId: HexString;
+    tokencollateral: Address;
+    tokensSharesContractId: HexString;
     balance: bigint;
   };
 
@@ -58,28 +58,28 @@ export namespace SubjectSharesBalanceTypes {
 }
 
 class Factory extends ContractFactory<
-  SubjectSharesBalanceInstance,
-  SubjectSharesBalanceTypes.Fields
+  TokenSharesBalanceInstance,
+  TokenSharesBalanceTypes.Fields
 > {
   getInitialFieldsWithDefaultValues() {
-    return this.contract.getInitialFieldsWithDefaultValues() as SubjectSharesBalanceTypes.Fields;
+    return this.contract.getInitialFieldsWithDefaultValues() as TokenSharesBalanceTypes.Fields;
   }
 
   consts = {
     ErrorCodes: {
-      SubjectSharesContractAllowedOnly: BigInt(0),
+      TokenSharesContractAllowedOnly: BigInt(0),
       NotEnoughBalance: BigInt(1),
     },
   };
 
-  at(address: string): SubjectSharesBalanceInstance {
-    return new SubjectSharesBalanceInstance(address);
+  at(address: string): TokenSharesBalanceInstance {
+    return new TokenSharesBalanceInstance(address);
   }
 
   tests = {
     getBalance: async (
       params: Omit<
-        TestContractParams<SubjectSharesBalanceTypes.Fields, never>,
+        TestContractParams<TokenSharesBalanceTypes.Fields, never>,
         "testArgs"
       >
     ): Promise<TestContractResult<bigint>> => {
@@ -87,7 +87,7 @@ class Factory extends ContractFactory<
     },
     addBalance: async (
       params: TestContractParams<
-        SubjectSharesBalanceTypes.Fields,
+        TokenSharesBalanceTypes.Fields,
         { amount: bigint }
       >
     ): Promise<TestContractResult<null>> => {
@@ -95,7 +95,7 @@ class Factory extends ContractFactory<
     },
     reduceBalance: async (
       params: TestContractParams<
-        SubjectSharesBalanceTypes.Fields,
+        TokenSharesBalanceTypes.Fields,
         { amount: bigint }
       >
     ): Promise<TestContractResult<null>> => {
@@ -105,30 +105,30 @@ class Factory extends ContractFactory<
 }
 
 // Use this object to test and deploy the contract
-export const SubjectSharesBalance = new Factory(
+export const TokenSharesBalance = new Factory(
   Contract.fromJson(
-    SubjectSharesBalanceContractJson,
+    TokenSharesBalanceContractJson,
     "",
     "3db400267b6d4ab5737e7daf05a152f31ed33b890a8579e5256531e1f5c7496a"
   )
 );
 
 // Use this class to interact with the blockchain
-export class SubjectSharesBalanceInstance extends ContractInstance {
+export class TokenSharesBalanceInstance extends ContractInstance {
   constructor(address: Address) {
     super(address);
   }
 
-  async fetchState(): Promise<SubjectSharesBalanceTypes.State> {
-    return fetchContractState(SubjectSharesBalance, this);
+  async fetchState(): Promise<TokenSharesBalanceTypes.State> {
+    return fetchContractState(TokenSharesBalance, this);
   }
 
   methods = {
     getBalance: async (
-      params?: SubjectSharesBalanceTypes.CallMethodParams<"getBalance">
-    ): Promise<SubjectSharesBalanceTypes.CallMethodResult<"getBalance">> => {
+      params?: TokenSharesBalanceTypes.CallMethodParams<"getBalance">
+    ): Promise<TokenSharesBalanceTypes.CallMethodResult<"getBalance">> => {
       return callMethod(
-        SubjectSharesBalance,
+        TokenSharesBalance,
         this,
         "getBalance",
         params === undefined ? {} : params,
@@ -137,14 +137,14 @@ export class SubjectSharesBalanceInstance extends ContractInstance {
     },
   };
 
-  async multicall<Calls extends SubjectSharesBalanceTypes.MultiCallParams>(
+  async multicall<Calls extends TokenSharesBalanceTypes.MultiCallParams>(
     calls: Calls
-  ): Promise<SubjectSharesBalanceTypes.MultiCallResults<Calls>> {
+  ): Promise<TokenSharesBalanceTypes.MultiCallResults<Calls>> {
     return (await multicallMethods(
-      SubjectSharesBalance,
+      TokenSharesBalance,
       this,
       calls,
       getContractByCodeHash
-    )) as SubjectSharesBalanceTypes.MultiCallResults<Calls>;
+    )) as TokenSharesBalanceTypes.MultiCallResults<Calls>;
   }
 }

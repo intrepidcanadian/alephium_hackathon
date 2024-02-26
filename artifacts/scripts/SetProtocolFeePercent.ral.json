@@ -1,11 +1,11 @@
 {
   "version": "v2.8.3",
   "name": "SetProtocolFeePercent",
-  "bytecodeTemplate": "01010300000005{0}0d0c{1}0100",
+  "bytecodeTemplate": "01010300000005{0}0d0c{1}0116",
   "fieldsSig": {
     "names": [
       "feePercent",
-      "friendTech"
+      "borrowing"
     ],
     "types": [
       "U256",

@@ -1,18 +1,15 @@
 {
   "version": "v2.8.3",
-  "name": "Deposit",
-  "bytecodeTemplate": "01010300000008b4{1}a2{1}0d0c{0}0106",
+  "name": "Update",
+  "bytecodeTemplate": "010103000000050c0d{0}011218",
   "fieldsSig": {
     "names": [
-      "token",
-      "amount"
+      "token"
     ],
     "types": [
-      "ByteVec",
-      "U256"
+      "ByteVec"
     ],
     "isMutable": [
-      false,
       false
     ]
   },
