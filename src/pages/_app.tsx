@@ -1,22 +1,20 @@
-import React, {useState, useEffect} from 'react'
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
-import { AlephiumWalletProvider } from '@alephium/web3-react'
+import { React, useState} from 'react';
+import { AppProps } from 'next/app';
+import '@/styles/globals.css';
+import { AlephiumWalletProvider } from '@alephium/web3-react';
 import { tokenFaucetConfig } from '@/services/utils'
 
-export default function App({ Component, pageProps }: AppProps) {
+import { AlephiumConnectButton } from '@alephium/web3-react'
 
-  const [theme, setTheme] = useState('retro')
+// This is the custom App component to initialize pages
+export default function MyApp({ Component, pageProps }: AppProps) {
 
-  useEffect(() => {
-  }, [theme])
+  const [theme, setTheme] = useState('retro');
 
   return (
-
-      <div className = "wallet__button">
-        <h1>Alephium Hackathon - Alph Dabbler - Supplying Alph into Interest Pool or Withdrawing Alph from Interest Pool</h1>
-        <p>Choose a Connect Wallet Theme</p>
-        <select value={theme} onChange={(e) => setTheme(e.target.value)}>
+    <div>
+    <div style = {{padding: "1rem", width: "100%",  alignContent: "center", alignItems: "center", justifyContent: "center", display: "flex", flexDirection: "column"}}>
+      <select style = {{margin: "1rem"}} value={theme} onChange={(e) => setTheme(e.target.value)}>
           <option value="simple-light">Simple Light</option>
           <option value="simple-dark">Simple Dark</option>
           <option value="web95">Web95</option>
@@ -27,11 +25,11 @@ export default function App({ Component, pageProps }: AppProps) {
           <option value="rounded">Rounded</option>
           <option value="nouns">Nouns</option>
       </select>
-      
       <AlephiumWalletProvider theme={theme} network={tokenFaucetConfig.network} addressGroup={tokenFaucetConfig.groupIndex}>
+        <AlephiumConnectButton />
         <Component {...pageProps} />
       </AlephiumWalletProvider>
-      </div>
-  
+    </div>
+    </div>
   )
 }

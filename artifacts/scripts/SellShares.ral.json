@@ -1,5 +1,5 @@
 {
-  "version": "v2.8.3",
+  "version": "v2.9.0",
   "name": "SellShares",
   "bytecodeTemplate": "01010300000006{0}{1}0e0c{2}011e",
   "fieldsSig": {

@@ -1,5 +1,5 @@
 {
-  "version": "v2.8.3",
+  "version": "v2.9.0",
   "name": "Deposit",
   "bytecodeTemplate": "0101030000000ab4{1}13c40de0b6b3a76400002ca2{1}0d0c{0}0115",
   "fieldsSig": {

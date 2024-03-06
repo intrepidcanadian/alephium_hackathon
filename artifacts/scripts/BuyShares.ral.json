@@ -1,5 +1,5 @@
 {
-  "version": "v2.8.3",
+  "version": "v2.9.0",
   "name": "BuyShares",
   "bytecodeTemplate": "01010300000009b4{2}a2{0}{1}0e0c{3}011d",
   "fieldsSig": {

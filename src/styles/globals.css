@@ -1,3 +1,8 @@
+#__next {
+  width: 100%;
+  padding: 1rem;
+}
+
 * {
   box-sizing: border-box;
 }

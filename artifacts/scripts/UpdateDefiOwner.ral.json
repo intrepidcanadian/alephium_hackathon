@@ -1,5 +1,5 @@
 {
-  "version": "v2.8.3",
+  "version": "v2.9.0",
   "name": "UpdateDefiOwner",
   "bytecodeTemplate": "01010300000005{0}0d0c{1}010c",
   "fieldsSig": {

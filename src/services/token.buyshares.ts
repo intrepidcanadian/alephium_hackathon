@@ -4,14 +4,14 @@ import { BuyShares } from '../../artifacts/ts/scripts'
 export const buyShares = async (signerProvider: SignerProvider, amount: string, tokenId: string): Promise<ExecuteScriptResult> => 
 
 {
-  
-    return await BuyShares.execute(signerProvider, {
-    initialFields: {
-      subject: tokenId,
-      amount: BigInt(amount),
-      totalPayment: BigInt(amount),
-      borrowing: subContract,
-    },
-    attoAlphAmount: DUST_AMOUNT,
-  })
+    
+        return await BuyShares.execute(signerProvider, {
+        initialFields: {
+            subject: tokenId,
+            amount: BigInt(amount),
+            totalPayment: BigInt(amount),
+            borrowing: subContractId,
+        },
+        attoAlphAmount: DUST_AMOUNT,
+    })
 }

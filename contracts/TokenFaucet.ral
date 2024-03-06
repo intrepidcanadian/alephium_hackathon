@@ -186,7 +186,7 @@ Contract TokenFaucet(
     pub fn getAccruedInterest() -> U256 {
         let currentblocktimestamp = getBlockTimeStamp()
         let mut timeelapsed = 0
-        let interestrate = 500
+        let interestrate = getInterest()
         let millisecondsinyear = 31536000000
         let scalingfactor = 10 ** 18
 
