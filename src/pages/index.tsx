@@ -38,18 +38,21 @@ export default function Home() {
     <>
         {!!accountdata && 
           <div style={{ borderTop: '2px solid #000', borderBottom: '2px solid #000', marginTop: '1rem', width: "100%" }}>
-            <h3>Wallet Information</h3>
-            <ul>
-            <li>Address of Wallet: {accountdata.address} </li>  
-            <li>Public Key of Wallet: {accountdata.publicKey} </li> 
-            <li>Current Status is: {connectionStatusdata} </li> 
-            <li>Network is: {accountdata.network} </li>
-            </ul>
+            <h1>Alephium Defi App</h1>
           </div> }
       
       <div className={styles.container}>
         {connectionStatusdata === 'connected' && (
+          <>
+            <h3>Wallet Information</h3>
+            <ul>
+              <li>Address of Wallet: {accountdata.address} </li>  
+              <li>Public Key of Wallet: {accountdata.publicKey} </li> 
+              <li>Current Status is: {connectionStatusdata} </li> 
+              <li>Network is: {accountdata.network} </li>
+            </ul>
           <TokenDapp config={tokenFaucetConfig} />
+          </>
         )}
       </div>
     </>
